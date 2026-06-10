@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE FITNESS HUB | Premium Gym in Kurla, Mumbai</title>
+    <meta name="description" content="Forge your legacy at THE FITNESS HUB, Kurla, Mumbai's premier luxury gym. Offering advanced weight training, CrossFit, HIIT, personal training, and nutrition consulting. Rated 4.8 stars.">
+    <meta name="keywords" content="gym in Kurla, fitness hub mumbai, luxury gym, powerlifting kurla, crossfit kurla, personal trainer kurla">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:8080/">
+    <meta property="og:title" content="THE FITNESS HUB | Premium Gym in Kurla, Mumbai">
+    <meta property="og:description" content="Forge your legacy at THE FITNESS HUB, Kurla, Mumbai's premier luxury gym. Offering advanced weight training, CrossFit, HIIT, and personal training.">
+    <meta property="og:image" content="http://localhost:8080/assets/hero_bg.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="http://localhost:8080/">
+    <meta property="twitter:title" content="THE FITNESS HUB | Premium Gym in Kurla, Mumbai">
+    <meta property="twitter:description" content="Forge your legacy at THE FITNESS HUB, Kurla, Mumbai's premier luxury gym.">
+    <meta property="twitter:image" content="http://localhost:8080/assets/hero_bg.png">
+    
+    <link rel="canonical" href="http://localhost:8080/">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syncopate:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Local Business Schema Markup (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ExerciseGym",
+      "name": "THE FITNESS HUB",
+      "image": "https://thefitnesshub.com/assets/hero_bg.png",
+      "@id": "https://thefitnesshub.com/#gym",
+      "url": "https://thefitnesshub.com",
+      "telephone": "+918108884757",
+      "priceRange": "$$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "First Floor, Serene Shelter, Mass Building, B Wing, Nehru Nagar, Kurla",
+        "addressLocality": "Mumbai",
+        "addressRegion": "Maharashtra",
+        "postalCode": "400024",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 19.0607,
+        "longitude": 72.8884
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "opens": "06:00",
+        "closes": "23:30"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "81"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Fitness Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Weight Training"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Crossfit & HIIT"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Personal Training"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Nutrition Consulting"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Adult Sports"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Spa Services"
+            }
+          }
+        ]
+      }
+    }
+    </script>
+</head>
+<body>
+    
+    <!-- Sleek Brutalist Preloader -->
+    <div id="preloader" class="preloader">
+        <div class="preloader-content">
+            <h2 class="preloader-logo">THE FITNESS HUB</h2>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="progress-percentage" id="progress-percentage">0%</div>
+            <p class="preloader-status">LOAD_SYSTEM_RESOURCES...</p>
+        </div>
+    </div>
+
+    <!-- Header & Navigation -->
+    <header class="header">
+        <nav class="nav container" aria-label="Main Navigation">
+            <a href="#hero" class="logo" aria-label="THE FITNESS HUB Homepage">THE FITNESS HUB</a>
+            
+            <button class="mobile-toggle" aria-label="Toggle Menu" aria-expanded="false" aria-controls="nav-links">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#hero" class="nav-link active">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#gallery" class="nav-link">Gallery</a></li>
+                <li><a href="#services" class="nav-link">Services</a></li>
+                <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li class="mobile-cta-li"><a href="#contact" class="btn btn-primary btn-mobile-cta" aria-label="Join THE FITNESS HUB">JOIN THE HUB</a></li>
+            </ul>
+            
+            <div class="nav-cta">
+                <a href="#contact" class="btn btn-primary" aria-label="Join THE FITNESS HUB">JOIN THE HUB</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Scroll Container -->
+        <div class="hero-scroll-container" id="hero">
+            <!-- Sticky Viewport -->
+            <div class="hero-sticky-viewport">
+                <canvas id="hero-canvas"></canvas>
+                <div class="hero-bg-overlay"></div>
+                
+                <!-- Scene 1 Text Overlay -->
+                <div class="hero-scene hero-scene-1 active-scene">
+                    <div class="hero-content container">
+                        <h1 class="hero-title" id="dyn-heroTitle1">FORGE YOUR LEGACY.</h1>
+                        <p class="hero-subtitle" id="dyn-heroSubtitle1">Premium equipment. Elite trainers. The ultimate fitness experience in Kurla, Mumbai.</p>
+                    </div>
+                </div>
+
+                <!-- Scene 2 Text Overlay -->
+                <div class="hero-scene hero-scene-2">
+                    <div class="hero-content container">
+                        <h2 class="hero-title" id="dyn-heroTitle2">BUILT ON RAW POWER.</h2>
+                        <p class="hero-subtitle" id="dyn-heroSubtitle2">Precision machinery and specialized platforms for max effort strength training.</p>
+                    </div>
+                </div>
+
+                <!-- Scene 3 Text Overlay -->
+                <div class="hero-scene hero-scene-3">
+                    <div class="hero-content container">
+                        <h2 class="hero-title" id="dyn-heroTitle3">JOIN THE FITNESS HUB.</h2>
+                        <p class="hero-subtitle" id="dyn-heroSubtitle3">Unleash your potential today. Book a session with our championship-grade coaching team.</p>
+                        <div class="hero-actions">
+                            <a href="#contact" class="btn btn-primary" aria-label="Start training now at THE FITNESS HUB">Start Training</a>
+                            <a href="#services" class="btn btn-secondary" aria-label="Explore gym services and facility">Explore Facility</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic scroll indicator -->
+                <div class="scroll-indicator hero-scroll-indicator" aria-hidden="true">
+                    <span class="scroll-arrow"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reputation Banner (Social Proof) -->
+        <section id="reputation" class="reputation-banner reveal" aria-label="Reputation and Features">
+            <div class="reputation-container container">
+                <div class="reputation-rating">
+                    <div class="stars" aria-label="5 out of 5 stars">⭐⭐⭐⭐⭐</div>
+                    <p class="rating-text"><strong>4.8/5 Rating</strong> across 81+ Reviews</p>
+                </div>
+                <div class="reputation-divider" aria-hidden="true"></div>
+                <div class="reputation-tags">
+                    <span>TOP-QUALITY EQUIPMENT</span>
+                    <span class="bullet" aria-hidden="true">•</span>
+                    <span>BODYBUILDING</span>
+                    <span class="bullet" aria-hidden="true">•</span>
+                    <span>POWERLIFTING</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Redesigned About Section (Split Layout: Photo on one side, Description/Coaches on the other) -->
+        <section id="about" class="about-section section-padding" aria-label="About Our Gym and Philosophy">
+            <div class="container">
+                <div class="about-split-layout">
+                    <!-- Left Side: Photo -->
+                    <div class="about-photo-wrapper reveal">
+                        <img src="assets/about_img.jpg" alt="Elite head coach and training staff at THE FITNESS HUB in Kurla, Mumbai" class="about-photo">
+                    </div>
+
+                    <!-- Right Side: Description and Coaches -->
+                    <div class="about-info-wrapper reveal">
+                        <div class="section-header">
+                            <h2 class="section-title">THE PHILOSOPHY</h2>
+                            <p class="section-subtitle" id="dyn-aboutSubtitle">We don't build gym memberships. We forge relentless athletic capability and physical fortitude.</p>
+                        </div>
+                        
+                        <div class="about-story">
+                            <p class="story-text" id="dyn-aboutStory1">
+                                Founded in Kurla, Mumbai, <strong>THE FITNESS HUB</strong> was established to bridge the gap between commercialized fitness franchises and hardcore strength athletics. We set out to create a sanctuary where physical potential is realized through raw science, top-tier infrastructure, and unyielding discipline.
+                            </p>
+                            <p class="story-text" id="dyn-aboutStory2">
+                                Every bar, platform, and program at the Hub is curated for serious results. We offer a high-intensity, zero-compromise environment designed to push you past your boundaries.
+                            </p>
+                        </div>
+
+                        <!-- Core Values Stack -->
+                        <div class="story-values">
+                            <div class="value-card">
+                                <h3>INTENSIFY</h3>
+                                <p>Approach every set with complete psychological focus and maximal muscular recruitment.</p>
+                            </div>
+                            <div class="value-card">
+                                <h3>EVOLVE</h3>
+                                <p>Analyze kinetic patterns, optimize macros, and upgrade performance metrics weekly.</p>
+                            </div>
+                        </div>
+
+                        <!-- Compact Coaches List -->
+                        <div class="about-coaches-block">
+                            <h3 class="about-coaches-title">ELITE COACHING STAFF</h3>
+                            <div class="coaches-list">
+                                <div class="coach-item">
+                                    <strong>Vikram Salvi</strong> - <span>Strength & Powerlifting Coach</span>
+                                </div>
+                                <div class="coach-item">
+                                    <strong>Neha Nair</strong> - <span>Head CrossFit & HIIT Instructor</span>
+                                </div>
+                                <div class="coach-item">
+                                    <strong>Dr. Amit Mehta</strong> - <span>Lead Sports Dietitian</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="gallery-section container section-padding" aria-label="Gym Image Gallery">
+            <div class="section-header reveal">
+                <h2 class="section-title">VISUAL PROOF</h2>
+                <p class="section-subtitle">Inside our high-performance facility in Kurla, Mumbai. Designed for athletes, lifters, and elite coaching.</p>
+            </div>
+            
+            <div class="gallery-grid" id="dynamic-gallery-grid">
+                <!-- Loaded Dynamically via JS -->
+            </div>
+        </section>
+
+        <!-- Bento Box Services Section -->
+        <section id="services" class="services-section container section-padding" aria-label="Gym Services">
+            <div class="section-header reveal">
+                <h2 class="section-title">THE SERVICES</h2>
+                <p class="section-subtitle">Championship-grade coaching and wellness infrastructure tailored for elite performance.</p>
+            </div>
+            
+            <div class="bento-grid">
+                <!-- Card 1: CrossFit & HIIT -->
+                <article class="bento-card card-large reveal">
+                    <img src="assets/crossfit.png" alt="Relentless functional training and high-intensity kettlebell workouts at THE FITNESS HUB in Kurla, Mumbai" class="card-bg-img" loading="lazy">
+                    <div class="card-overlay" aria-hidden="true"></div>
+                    <div class="card-content">
+                        <div class="card-tag">HIGH INTENSITY</div>
+                        <h3 class="card-title">CrossFit & HIIT</h3>
+                        <p class="card-description">Explosive conditioning circuits and functional workouts designed to shatter plateaus and build relentless athletic endurance.</p>
+                    </div>
+                </article>
+
+                <!-- Card 2: Weight Training -->
+                <article class="bento-card card-medium reveal">
+                    <img src="assets/bodybuilding.png" alt="Premium bodybuilding and heavy powerlifting weight training plates at THE FITNESS HUB in Kurla, Mumbai" class="card-bg-img" loading="lazy">
+                    <div class="card-overlay" aria-hidden="true"></div>
+                    <div class="card-content">
+                        <div class="card-tag">STRENGTH</div>
+                        <h3 class="card-title">Weight Training</h3>
+                        <p class="card-description">Premium free weights, precision machinery, and specialized powerlifting platforms for targeted hypertrophy and max effort lifts.</p>
+                    </div>
+                </article>
+
+                <!-- Card 3: Personal Training -->
+                <article class="bento-card card-small reveal">
+                    <div class="card-content">
+                        <div class="card-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <h3 class="card-title">Personal Training</h3>
+                        <p class="card-description">1-on-1 bio-mechanic training with certified coaches committed to your physical evolution.</p>
+                    </div>
+                </article>
+
+                <!-- Card 4: Nutrition Consulting -->
+                <article class="bento-card card-wide reveal">
+                    <div class="card-content">
+                        <div class="card-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                        <h3 class="card-title">Nutrition Consulting</h3>
+                        <p class="card-description">Custom macro-nutritional programming and supplement strategies backed by metabolic science to optimize body composition and recovery rates.</p>
+                    </div>
+                </article>
+
+                <!-- Card 5: Adult Sports -->
+                <article class="bento-card card-full reveal">
+                    <div class="card-content">
+                        <div class="card-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M6 12A6 6 0 0 1 18 12"/><path d="M12 6A6 6 0 0 1 12 18"/></svg>
+                        </div>
+                        <h3 class="card-title">Adult Sports</h3>
+                        <p class="card-description">Structured leagues, combat sports, and group athletic training for competitive team performance.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="testimonials-section section-padding" aria-label="Athlete Testimonials">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2 class="section-title">VOICE OF THE ATHLETE</h2>
+                    <p class="section-subtitle">Real feedback from the dedicated lifters and athletes who call the Hub home.</p>
+                </div>
+                
+                <div class="testimonials-grid">
+                    <article class="testimonial-card reveal">
+                        <div class="testimonial-rating" aria-label="5 out of 5 stars">⭐⭐⭐⭐⭐</div>
+                        <blockquote class="testimonial-quote">
+                            "Amazing atmosphere, top-quality equipment, and highly supportive trainers."
+                        </blockquote>
+                        <div class="testimonial-author">
+                            <span class="author-avatar" aria-hidden="true">AS</span>
+                            <div>
+                                <h4 class="author-name">Anshuman S.</h4>
+                                <p class="author-title">Verified Member</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="testimonial-card reveal">
+                        <div class="testimonial-rating" aria-label="5 out of 5 stars">⭐⭐⭐⭐⭐</div>
+                        <blockquote class="testimonial-quote">
+                            "Perfect place for both beginners and experienced people."
+                        </blockquote>
+                        <div class="testimonial-author">
+                            <span class="author-avatar" aria-hidden="true">RK</span>
+                            <div>
+                                <h4 class="author-name">Rahul K.</h4>
+                                <p class="author-title">Powerlifter</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="testimonial-card reveal">
+                        <div class="testimonial-rating" aria-label="5 out of 5 stars">⭐⭐⭐⭐⭐</div>
+                        <blockquote class="testimonial-quote">
+                            "Environment, proper and good condition machine."
+                        </blockquote>
+                        <div class="testimonial-author">
+                            <span class="author-avatar" aria-hidden="true">PD</span>
+                            <div>
+                                <h4 class="author-name">Pratik D.</h4>
+                                <p class="author-title">Bodybuilder</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Form Section -->
+        <section id="contact" class="contact-section container section-padding" aria-label="Contact Form and Location Information">
+            <div class="contact-grid">
+                <!-- Form column -->
+                <div class="contact-form-container reveal">
+                    <h2 class="section-title">REGISTRATION</h2>
+                    <form class="contact-form" id="gym-contact-form">
+                        <div class="form-group">
+                            <label for="contact-name">FULL NAME *</label>
+                            <input type="text" id="contact-name" name="name" placeholder="Enter your full name" required aria-required="true">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact-email">EMAIL ADDRESS *</label>
+                            <input type="email" id="contact-email" name="email" placeholder="name@domain.com" required aria-required="true">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact-phone">PHONE NUMBER</label>
+                            <input type="tel" id="contact-phone" name="phone" placeholder="00000 00000">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact-service">SERVICE OF INTEREST</label>
+                            <select id="contact-service" name="service">
+                                <option value="Weight Training">Weight Training</option>
+                                <option value="CrossFit & HIIT">CrossFit & HIIT</option>
+                                <option value="Personal Training">Personal Training</option>
+                                <option value="Nutrition Consulting">Nutrition Consulting</option>
+                                <option value="Adult Sports">Adult Sports</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact-message">MESSAGE / INTENT *</label>
+                            <textarea id="contact-message" name="message" rows="5" placeholder="Tell us about your fitness goals..." required aria-required="true"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary form-submit-btn" aria-label="Submit Form to Join THE FITNESS HUB">SEND TRANSMISSION</button>
+                    </form>
+                </div>
+
+                <!-- Info sidebar column -->
+                <div class="contact-sidebar reveal">
+                    <h2 class="section-title">THE HUB</h2>
+                    
+                    <div class="sidebar-details">
+                        <div class="sidebar-item">
+                            <h3>CALL</h3>
+                            <a href="tel:08108884757" class="sidebar-link" aria-label="Call THE FITNESS HUB at 081088 84757">081088 84757</a>
+                        </div>
+
+                        <div class="sidebar-item">
+                            <h3>VISIT</h3>
+                            <p class="sidebar-text">
+                                First Floor, Serene Shelter, Mass Building, B Wing,<br>
+                                Nehru Nagar, Kurla, Mumbai, Maharashtra 400024
+                            </p>
+                        </div>
+
+                        <div class="sidebar-item">
+                            <h3>HOURS</h3>
+                            <p class="sidebar-text">Monday – Sunday: 6:00 AM – 11:30 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer & Location -->
+    <footer class="footer" aria-label="Footer and Contact Details">
+        <div class="footer-container container">
+            <div class="footer-info reveal">
+                <h2 class="footer-cta-title">READY TO SWEAT?</h2>
+                <a href="tel:08108884757" class="footer-phone" aria-label="Call THE FITNESS HUB at 081088 84757">081088 84757</a>
+            </div>
+            
+            <div class="footer-address-block reveal">
+                <h3 class="footer-subheading">LOCATION</h3>
+                <p class="footer-address">
+                    First Floor, Serene Shelter, Mass Building, B Wing,<br>
+                    Nehru Nagar, Kurla, Mumbai, Maharashtra 400024
+                </p>
+            </div>
+
+            <div class="footer-hours-block reveal">
+                <h3 class="footer-subheading">HOURS</h3>
+                <p class="footer-hours">Monday – Sunday: 6:00 AM – 11:30 PM</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom container">
+            <p class="copyright">&copy; 2026 THE FITNESS HUB. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#" aria-label="Privacy Policy">Privacy</a>
+                <a href="#" aria-label="Terms of Service">Terms</a>
+                <a href="#admin-overlay" id="admin-trigger-link" aria-label="Access Admin Panel">Admin Panel</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Success Overlay Modal -->
+    <div class="success-overlay" id="success-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc" style="display: none;">
+        <div class="success-modal">
+            <h2 id="modal-title">TRANSMISSION RECEIVED.</h2>
+            <p id="modal-desc">Your registration details have been securely logged. A strength consultant will contact you shortly.</p>
+            <button class="btn btn-primary" id="close-success" aria-label="Dismiss this confirmation dialog">DISMISS</button>
+        </div>
+    </div>
+
+    <!-- Admin Panel Overlay -->
+    <div class="admin-overlay" id="admin-overlay" role="dialog" aria-modal="true" style="display: none;">
+        <div class="admin-modal">
+            <button class="admin-close-btn" id="admin-close-btn" aria-label="Close Admin Panel">&times;</button>
+            
+            <!-- SETUP SCREEN (First-time initialization) -->
+            <div class="admin-view" id="admin-setup-view" style="display: none;">
+                <h2 class="admin-view-title">INITIALISE ADMIN</h2>
+                <p class="admin-view-desc">Register the single administrative slot. Note: Only credentials matching your requested ID and password are permitted.</p>
+                <form id="admin-setup-form" class="admin-form">
+                    <div class="form-group">
+                        <label for="setup-username">ADMIN ID</label>
+                        <input type="text" id="setup-username" placeholder="e.g., The Fitness Hub" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="setup-password">PASSWORD</label>
+                        <input type="password" id="setup-password" placeholder="e.g., thefitnesshub@25" required>
+                    </div>
+                    <div class="form-error-msg" id="setup-error" style="color: #ff3333; font-size: 0.85rem; margin-top: -0.5rem; display: none;"></div>
+                    <button type="submit" class="btn btn-primary">CREATE ACCOUNT</button>
+                </form>
+            </div>
+            
+            <!-- LOGIN SCREEN -->
+            <div class="admin-view" id="admin-login-view" style="display: none;">
+                <h2 class="admin-view-title">ADMIN LOGIN</h2>
+                <p class="admin-view-desc">Access the central operations console.</p>
+                <form id="admin-login-form" class="admin-form">
+                    <div class="form-group">
+                        <label for="login-username">ADMIN ID</label>
+                        <input type="text" id="login-username" placeholder="Enter Admin ID" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">PASSWORD</label>
+                        <input type="password" id="login-password" placeholder="Enter Password" required>
+                    </div>
+                    <div class="form-error-msg" id="login-error" style="color: #ff3333; font-size: 0.85rem; margin-top: -0.5rem; display: none;"></div>
+                    <button type="submit" class="btn btn-primary">AUTHENTICATE</button>
+                </form>
+            </div>
+            
+            <!-- DASHBOARD SCREEN -->
+            <div class="admin-view" id="admin-dashboard-view" style="display: none;">
+                <div class="dashboard-header">
+                    <h2 class="admin-view-title">OPERATIONS CONSOLE</h2>
+                    <button class="btn btn-secondary btn-small" id="admin-logout-btn" style="padding: 0.5rem 1rem; font-size: 0.75rem;">LOGOUT</button>
+                </div>
+                
+                <!-- Tabs Navigation -->
+                <div class="dashboard-tabs" style="display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--color-border-dim); padding-bottom: 1rem;">
+                    <button class="tab-btn active" id="tab-bookings-btn" style="background: none; border: none; color: var(--color-text-white); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid var(--color-text-white);">BOOKINGS (<span id="bookings-count">0</span>)</button>
+                    <button class="tab-btn" id="tab-gallery-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">GALLERY MANAGER</button>
+                    <button class="tab-btn" id="tab-content-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">CONTENT EDITOR</button>
+                </div>
+                
+                <!-- Tab 1: Bookings Content -->
+                <div class="tab-content active" id="tab-bookings-content">
+                    <div class="bookings-actions" style="margin-bottom: 1.5rem; display: flex; justify-content: flex-end; gap: 1rem;">
+                        <button class="btn btn-primary btn-small" id="download-bookings-btn" style="padding: 0.5rem 1rem; font-size: 0.75rem;">DOWNLOAD CSV</button>
+                        <button class="btn btn-secondary btn-small" id="clear-bookings-btn" style="padding: 0.5rem 1rem; font-size: 0.75rem;">CLEAR ALL BOOKINGS</button>
+                    </div>
+                    <div class="bookings-list" id="bookings-list" style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem;">
+                        <!-- Dynamically Loaded Bookings -->
+                    </div>
+                </div>
+                
+                <!-- Tab 2: Gallery Manager Content -->
+                <div class="tab-content" id="tab-gallery-content" style="display: none;">
+                    <!-- Add Image Form -->
+                    <form id="admin-add-photo-form" class="admin-form add-photo-form" style="border: 1px solid var(--color-border-dim); padding: 1.5rem; margin-bottom: 2rem;">
+                        <h3 style="font-size: 1rem; margin-bottom: 1rem; letter-spacing: 0.05em;">ADD NEW PHOTO</h3>
+                        
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label style="font-family: var(--font-heading); font-size: 0.7rem; color: var(--color-text-gray); margin-bottom: 0.5rem; display: block;">SOURCE TYPE</label>
+                            <div class="source-toggle-row" style="display: flex; gap: 1.5rem; font-size: 0.9rem;">
+                                <label style="cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-weight: 300;"><input type="radio" name="photo-source" value="file" checked style="accent-color: white;"> Upload Local File</label>
+                                <label style="cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-weight: 300;"><input type="radio" name="photo-source" value="url" style="accent-color: white;"> Web URL</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" id="photo-file-group" style="margin-bottom: 1.2rem;">
+                            <label for="photo-file">SELECT LOCAL IMAGE</label>
+                            <input type="file" id="photo-file" accept="image/*" style="width: 100%; padding: 0.5rem; background: var(--color-bg-primary); border: 1px solid var(--color-border-dim); color: white;">
+                        </div>
+                        <div class="form-group" id="photo-url-group" style="margin-bottom: 1.2rem; display: none;">
+                            <label for="photo-url">IMAGE URL</label>
+                            <input type="url" id="photo-url" placeholder="https://example.com/image.jpg">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label for="photo-caption">CAPTION / ROOM *</label>
+                            <input type="text" id="photo-caption" placeholder="e.g., MAIN STRENGTH ROOM" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.75rem; width: auto;">ADD PHOTO</button>
+                    </form>
+                    
+                    <!-- Manage existing list -->
+                    <h3 style="font-size: 1rem; margin-bottom: 1rem; letter-spacing: 0.05em; border-bottom: 1px solid var(--color-border-dim); padding-bottom: 0.5rem;">CURRENT GALLERY IMAGES</h3>
+                    <div class="gallery-manager-grid" id="gallery-manager-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; max-height: 300px; overflow-y: auto; padding-right: 0.5rem;">
+                        <!-- Dynamically Loaded Photos -->
+                    </div>
+                </div>
+                
+                <!-- Tab 3: Content Editor Content -->
+                <div class="tab-content" id="tab-content-content" style="display: none;">
+                    <form id="admin-content-form" class="admin-form" style="border: 1px solid var(--color-border-dim); padding: 1.5rem; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 1.2rem;">
+                        <h3 style="font-size: 1rem; letter-spacing: 0.05em; border-bottom: 1px solid var(--color-border-dim); padding-bottom: 0.5rem;">WEBSITE TEXT EDITOR</h3>
+                        
+                        <h4 style="font-family: var(--font-heading); font-size: 0.8rem; color: var(--color-text-white); margin-top: 0.5rem;">HERO PHASE 1 (SETUP)</h4>
+                        <div class="form-group">
+                            <label for="edit-heroTitle1">HERO TITLE 1</label>
+                            <input type="text" id="edit-heroTitle1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-heroSubtitle1">HERO SUBTITLE 1</label>
+                            <textarea id="edit-heroSubtitle1" rows="2" required></textarea>
+                        </div>
+                        
+                        <h4 style="font-family: var(--font-heading); font-size: 0.8rem; color: var(--color-text-white); margin-top: 0.5rem;">HERO PHASE 2 (THE LIFT)</h4>
+                        <div class="form-group">
+                            <label for="edit-heroTitle2">HERO TITLE 2</label>
+                            <input type="text" id="edit-heroTitle2" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-heroSubtitle2">HERO SUBTITLE 2</label>
+                            <textarea id="edit-heroSubtitle2" rows="2" required></textarea>
+                        </div>
+                        
+                        <h4 style="font-family: var(--font-heading); font-size: 0.8rem; color: var(--color-text-white); margin-top: 0.5rem;">HERO PHASE 3 (LOCKOUT)</h4>
+                        <div class="form-group">
+                            <label for="edit-heroTitle3">HERO TITLE 3</label>
+                            <input type="text" id="edit-heroTitle3" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-heroSubtitle3">HERO SUBTITLE 3</label>
+                            <textarea id="edit-heroSubtitle3" rows="2" required></textarea>
+                        </div>
+                        
+                        <h4 style="font-family: var(--font-heading); font-size: 0.8rem; color: var(--color-text-white); margin-top: 0.5rem;">ABOUT SECTION</h4>
+                        <div class="form-group">
+                            <label for="edit-aboutSubtitle">PHILOSOPHY SUBTITLE</label>
+                            <textarea id="edit-aboutSubtitle" rows="2" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-aboutStory1">STORY PARAGRAPH 1</label>
+                            <textarea id="edit-aboutStory1" rows="4" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-aboutStory2">STORY PARAGRAPH 2</label>
+                            <textarea id="edit-aboutStory2" rows="4" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.75rem; width: auto; margin-top: 1rem;">SAVE WEBSITE CONTENT</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom JS -->
+    <script src="app.js" defer></script>
+</body>
+</html>

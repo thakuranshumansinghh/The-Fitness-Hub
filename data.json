@@ -1,0 +1,19 @@
+{
+  "heroTitle1": "FORGE YOUR LEGACY.",
+  "heroSubtitle1": "Premium equipment. Elite trainers. The ultimate fitness experience in Kurla, Mumbai.",
+  "heroTitle2": "BUILT ON RAW POWER.",
+  "heroSubtitle2": "Precision machinery and specialized platforms for max effort strength training.",
+  "heroTitle3": "JOIN THE FITNESS HUB.",
+  "heroSubtitle3": "Unleash your potential today. Book a session with our championship-grade coaching team.",
+  "aboutSubtitle": "We don't build gym memberships. We forge relentless athletic capability and physical fortitude.",
+  "aboutStory1": "Founded in Kurla, Mumbai, THE FITNESS HUB was established to bridge the gap between commercialized fitness franchises and hardcore strength athletics. We set out to create a sanctuary where physical potential is realized through raw science, top-tier infrastructure, and unyielding discipline.",
+  "aboutStory2": "Every bar, platform, and program at the Hub is curated for serious results. We offer a high-intensity, zero-compromise environment designed to push you past your boundaries.",
+  "galleryImages": [
+    { "src": "assets/hero_bg.png", "caption": "MAIN STRENGTH ROOM" },
+    { "src": "assets/crossfit.png", "caption": "METABOLIC CONDITIONING FLOOR" },
+    { "src": "assets/bodybuilding.png", "caption": "FREE WEIGHT EQUIPMENT RACK" },
+    { "src": "assets/gallery_1.png", "caption": "POWERLIFTING PLATFORM" },
+    { "src": "assets/gallery_2.png", "caption": "CHAMPIONSHIP GRADE DUMBBELLS" },
+    { "src": "assets/gallery_3.png", "caption": "PULL-UP RIG AND RIGGING AREA" }
+  ]
+}
