@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // we load a subset of 81 frames sequentially in the background.
     // We load the very first frame immediately to display the site instantly, then load the rest.
     const totalFrames = 241;
-    const frameStep = 3; // Load every 3rd frame for optimal balance of smooth scroll and fast load
+    const frameStep = 4; // Load every 4th frame for optimal balance of smooth scroll and fast load
     
     const frameIndices = [];
     for (let i = 1; i <= totalFrames; i += frameStep) {
@@ -36,23 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentFrame = 1;
     let lastDrawnFrame = -1;
     
-    const closestLoadedLookup = new Array(totalFrames + 1).fill(null);
     let isRendering = false;
-    
-    function updateClosestFrameLookup(newLoadedIndex) {
-        for (let i = 1; i <= totalFrames; i++) {
-            const currentClosest = closestLoadedLookup[i];
-            if (currentClosest === null) {
-                closestLoadedLookup[i] = newLoadedIndex;
-            } else {
-                const currentDiff = Math.abs(currentClosest - i);
-                const newDiff = Math.abs(newLoadedIndex - i);
-                if (newDiff < currentDiff) {
-                    closestLoadedLookup[i] = newLoadedIndex;
-                }
-            }
-        }
-    }
     
     const scrollContainer = document.querySelector('.hero-scroll-container');
     const scene1 = document.querySelector('.hero-scene-1');
@@ -69,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         preloadedImages[firstFrameIndex] = firstImg;
         loadedCount++;
         
-        updateClosestFrameLookup(firstFrameIndex);
+        // First frame loaded
         
         // Show 100% on loader quickly and fade out
         if (progressBarEl) progressBarEl.style.width = '100%';
@@ -84,14 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Initial draw
             resizeCanvas();
             
-            // Start background sequential loading of remaining frames after full window load
-            if (document.readyState === 'complete') {
-                loadRemainingFrames(1);
-            } else {
-                window.addEventListener('load', () => {
-                    loadRemainingFrames(1);
-                });
-            }
+            // Start background parallel loading of remaining frames shortly after page is visible
+            setTimeout(loadRemainingFrames, 100);
             
             // Start render loop
             isRendering = true;
@@ -103,42 +81,46 @@ document.addEventListener('DOMContentLoaded', () => {
         // Fallback if first frame fails
         if (preloaderEl) preloaderEl.classList.add('fade-out');
         document.body.style.overflow = '';
-        loadRemainingFrames(1);
+        setTimeout(loadRemainingFrames, 100);
         requestAnimationFrame(renderLoop);
     };
 
-    function loadRemainingFrames(index) {
-        if (index >= frameIndices.length) return;
+    function loadRemainingFrames() {
+        const concurrency = 6;
+        let index = 1; // Start from index 1 as index 0 (first frame) is preloaded
         
-        const frameIndex = frameIndices[index];
-        const img = new Image();
-        img.src = `assets/hero-frames/ezgif-frame-${pad(frameIndex, 3)}.jpg`;
-        
-        const onFrameLoaded = () => {
-            preloadedImages[frameIndex] = img;
-            loadedCount++;
+        function loadNext() {
+            if (index >= frameIndices.length) return;
+            const currentIndex = index++;
+            const frameIndex = frameIndices[currentIndex];
             
-            updateClosestFrameLookup(frameIndex);
+            const img = new Image();
+            img.src = `assets/hero-frames/ezgif-frame-${pad(frameIndex, 3)}.jpg`;
             
-            if (canvas && !isRendering) {
-                drawFrame(Math.round(currentFrame));
-            }
+            const onFrameLoaded = () => {
+                preloadedImages[frameIndex] = img;
+                loadedCount++;
+                // Frame loaded
+                
+                if (canvas && !isRendering) {
+                    drawFrame(Math.round(currentFrame));
+                }
+                loadNext();
+            };
             
-            // Load next frame sequentially to keep request queue small
-            loadRemainingFrames(index + 1);
-        };
-        
-        // Trigger browser decoding to GPU memory
-        if (typeof img.decode === 'function') {
-            img.decode().then(() => {
-                onFrameLoaded();
-            }).catch(() => {
+            if (typeof img.decode === 'function') {
+                img.decode().then(onFrameLoaded).catch(() => {
+                    img.onload = onFrameLoaded;
+                    img.onerror = onFrameLoaded;
+                });
+            } else {
                 img.onload = onFrameLoaded;
                 img.onerror = onFrameLoaded;
-            });
-        } else {
-            img.onload = onFrameLoaded;
-            img.onerror = onFrameLoaded;
+            }
+        }
+        
+        for (let i = 0; i < concurrency; i++) {
+            loadNext();
         }
     }
 
@@ -146,8 +128,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const context = canvas.getContext('2d');
         
         function drawFrame(frameIndex) {
-            const closestIdx = closestLoadedLookup[frameIndex];
-            if (closestIdx === null || !preloadedImages[closestIdx]) return;
+            // Find the closest loaded frame that is <= frameIndex
+            let closestIdx = 1;
+            for (let i = frameIndex; i >= 1; i--) {
+                if (preloadedImages[i]) {
+                    closestIdx = i;
+                    break;
+                }
+            }
+            if (!preloadedImages[closestIdx]) return;
             
             const img = preloadedImages[closestIdx];
             if (!img.complete) return;
@@ -245,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentFrame = targetFrame;
                 isRendering = false; // Stop rendering once animations settle
             } else {
-                currentFrame += diff * 0.04; // Smooth ease-out factor
+                currentFrame += diff * 0.035; // Smooth ease-out factor
             }
             
             const frameToDraw = Math.round(currentFrame);

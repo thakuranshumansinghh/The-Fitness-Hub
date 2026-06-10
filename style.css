@@ -339,7 +339,7 @@ a {
 /* --- Hero Scroll Section --- */
 .hero-scroll-container {
     position: relative;
-    height: 650vh; /* scroll track length */
+    height: 500vh; /* scroll track length */
     background-color: var(--color-bg-pure);
 }
 
