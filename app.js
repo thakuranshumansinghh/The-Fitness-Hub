@@ -267,14 +267,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function fetchContent() {
         return fetch('/api/content')
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error('API not available');
+                return res.json();
+            })
             .then(data => {
                 siteContent = data;
                 applyContentToDOM();
             })
             .catch(err => {
-                console.error('Error fetching site content:', err);
-                applyContentToDOM(); // Fallback to defaults
+                console.warn('Backend API not available, loading content from localStorage fallback:', err);
+                const localContent = localStorage.getItem('the_fitness_hub_content');
+                if (localContent) {
+                    try {
+                        siteContent = JSON.parse(localContent);
+                    } catch (e) {
+                        console.error('Error parsing local storage content:', e);
+                    }
+                }
+                applyContentToDOM();
             });
     }
 
@@ -302,6 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function saveContentToServer() {
+        localStorage.setItem('the_fitness_hub_content', JSON.stringify(siteContent));
         return fetch('/api/content', {
             method: 'POST',
             headers: {
@@ -309,8 +321,14 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify(siteContent)
         })
-        .then(res => res.json())
-        .catch(err => console.error('Error saving content:', err));
+        .then(res => {
+            if (!res.ok) throw new Error('API not available');
+            return res.json();
+        })
+        .catch(err => {
+            console.warn('Backend API not available, content saved to localStorage only:', err);
+            return { status: 'success', storage: 'local' };
+        });
     }
 
     // Fetch server database content immediately
@@ -486,13 +504,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify(newBooking)
                 })
-                .then(res => res.json())
+                .then(res => {
+                    if (!res.ok) throw new Error('API not available');
+                    return res.json();
+                })
                 .then(() => {
                     successOverlay.style.display = 'flex';
                     contactForm.reset();
                 })
                 .catch(err => {
-                    console.error('Error saving booking:', err);
+                    console.warn('Backend API not available, saving booking to localStorage:', err);
+                    try {
+                        const localBookings = localStorage.getItem('the_fitness_hub_bookings');
+                        let bookings = localBookings ? JSON.parse(localBookings) : [];
+                        bookings.push(newBooking);
+                        localStorage.setItem('the_fitness_hub_bookings', JSON.stringify(bookings));
+                    } catch (e) {
+                        console.error('Error saving booking to localStorage:', e);
+                    }
                     successOverlay.style.display = 'flex';
                     contactForm.reset();
                 });
@@ -734,59 +763,75 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!bookingsList) return;
         
         fetch('/api/bookings')
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error('API not available');
+                return res.json();
+            })
             .then(bookings => {
-                bookingsCount.textContent = bookings.length;
-                bookingsList.innerHTML = '';
-
-                if (bookings.length === 0) {
-                    bookingsList.innerHTML = '<div class="no-bookings">NO REGISTRATIONS RECORDED</div>';
-                    return;
-                }
-
-                bookings.forEach(booking => {
-                    const card = document.createElement('div');
-                    card.className = 'booking-card';
-                    card.innerHTML = `
-                        <div class="booking-header">
-                           <span class="booking-name">${escapeHTML(booking.name)}</span>
-                           <span class="booking-date">${booking.date}</span>
-                        </div>
-                        <div class="booking-details-row">
-                           <div class="booking-detail-item">
-                               <strong>EMAIL</strong>
-                               <a href="mailto:${escapeHTML(booking.email)}">${escapeHTML(booking.email)}</a>
-                           </div>
-                           <div class="booking-detail-item">
-                               <strong>PHONE</strong>
-                               <span>${escapeHTML(booking.phone)}</span>
-                           </div>
-                           <div class="booking-detail-item">
-                               <strong>INTEREST</strong>
-                               <span>${escapeHTML(booking.service)}</span>
-                           </div>
-                        </div>
-                        <div class="booking-message">
-                           <strong>MESSAGE / INTENT:</strong><br>
-                           ${escapeHTML(booking.message).replace(/\n/g, '<br>')}
-                        </div>
-                        <button class="booking-delete-btn" data-id="${booking.id}">DELETE ENTRY</button>
-                    `;
-                    bookingsList.appendChild(card);
-                });
-
-                const delButtons = bookingsList.querySelectorAll('.booking-delete-btn');
-                delButtons.forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const id = e.target.getAttribute('data-id');
-                        deleteBooking(id);
-                    });
-                });
+                displayBookings(bookings);
             })
             .catch(err => {
-                console.error('Error fetching bookings:', err);
-                bookingsList.innerHTML = '<div class="no-bookings">ERROR CONNECTING TO DATABASE</div>';
+                console.warn('Backend API not available, loading bookings from localStorage fallback:', err);
+                const localBookings = localStorage.getItem('the_fitness_hub_bookings');
+                let bookings = [];
+                if (localBookings) {
+                    try {
+                        bookings = JSON.parse(localBookings);
+                    } catch (e) {
+                        console.error('Error parsing local storage bookings:', e);
+                    }
+                }
+                displayBookings(bookings);
             });
+    }
+
+    function displayBookings(bookings) {
+        bookingsCount.textContent = bookings.length;
+        bookingsList.innerHTML = '';
+
+        if (bookings.length === 0) {
+            bookingsList.innerHTML = '<div class="no-bookings">NO REGISTRATIONS RECORDED</div>';
+            return;
+        }
+
+        bookings.forEach(booking => {
+            const card = document.createElement('div');
+            card.className = 'booking-card';
+            card.innerHTML = `
+                <div class="booking-header">
+                   <span class="booking-name">${escapeHTML(booking.name)}</span>
+                   <span class="booking-date">${booking.date}</span>
+                </div>
+                <div class="booking-details-row">
+                   <div class="booking-detail-item">
+                       <strong>EMAIL</strong>
+                       <a href="mailto:${escapeHTML(booking.email)}">${escapeHTML(booking.email)}</a>
+                   </div>
+                   <div class="booking-detail-item">
+                       <strong>PHONE</strong>
+                       <span>${escapeHTML(booking.phone)}</span>
+                   </div>
+                   <div class="booking-detail-item">
+                       <strong>INTEREST</strong>
+                       <span>${escapeHTML(booking.service)}</span>
+                   </div>
+                </div>
+                <div class="booking-message">
+                   <strong>MESSAGE / INTENT:</strong><br>
+                   ${escapeHTML(booking.message).replace(/\n/g, '<br>')}
+                </div>
+                <button class="booking-delete-btn" data-id="${booking.id}">DELETE ENTRY</button>
+            `;
+            bookingsList.appendChild(card);
+        });
+
+        const delButtons = bookingsList.querySelectorAll('.booking-delete-btn');
+        delButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = e.target.getAttribute('data-id');
+                deleteBooking(id);
+            });
+        });
     }
 
     function deleteBooking(id) {
@@ -797,11 +842,27 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify({ id })
         })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) throw new Error('API not available');
+            return res.json();
+        })
         .then(() => {
             renderBookingsTab();
         })
-        .catch(err => console.error('Error deleting booking:', err));
+        .catch(err => {
+            console.warn('Backend API not available, deleting booking from localStorage:', err);
+            const localBookings = localStorage.getItem('the_fitness_hub_bookings');
+            if (localBookings) {
+                try {
+                    let bookings = JSON.parse(localBookings);
+                    bookings = bookings.filter(b => b.id !== id);
+                    localStorage.setItem('the_fitness_hub_bookings', JSON.stringify(bookings));
+                } catch (e) {
+                    console.error('Error parsing local bookings for deletion:', e);
+                }
+            }
+            renderBookingsTab();
+        });
     }
 
     if (downloadBookingsBtn) {
@@ -856,11 +917,18 @@ document.addEventListener('DOMContentLoaded', () => {
         clearBookingsBtn.addEventListener('click', () => {
             if (confirm('Are you sure you want to clear all registrations? This action is permanent.')) {
                 fetch('/api/clear-bookings', { method: 'POST' })
-                    .then(res => res.json())
+                    .then(res => {
+                        if (!res.ok) throw new Error('API not available');
+                        return res.json();
+                    })
                     .then(() => {
                         renderBookingsTab();
                     })
-                    .catch(err => console.error('Error clearing bookings:', err));
+                    .catch(err => {
+                        console.warn('Backend API not available, clearing localStorage bookings:', err);
+                        localStorage.removeItem('the_fitness_hub_bookings');
+                        renderBookingsTab();
+                    });
             }
         });
     }
