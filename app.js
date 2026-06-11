@@ -342,6 +342,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 "ctaText": "START CHAMPION",
                 "badge": "ULTIMATE"
             }
+        ],
+        services: [
+            {
+                "id": "1",
+                "tag": "HIGH INTENSITY",
+                "title": "CrossFit & HIIT",
+                "description": "Explosive conditioning circuits and functional workouts designed to shatter plateaus and build relentless athletic endurance.",
+                "image": "assets/crossfit.png",
+                "type": "large"
+            },
+            {
+                "id": "2",
+                "tag": "STRENGTH",
+                "title": "Weight Training",
+                "description": "Premium free weights, precision machinery, and specialized powerlifting platforms for targeted hypertrophy and max effort lifts.",
+                "image": "assets/bodybuilding.png",
+                "type": "medium"
+            },
+            {
+                "id": "3",
+                "tag": "PT",
+                "title": "Personal Training",
+                "description": "1-on-1 bio-mechanic training with certified coaches committed to your physical evolution.",
+                "image": "",
+                "icon": "personal_training",
+                "type": "small"
+            },
+            {
+                "id": "4",
+                "tag": "NUTRITION",
+                "title": "Nutrition Consulting",
+                "description": "Custom macro-nutritional programming and supplement strategies backed by metabolic science to optimize body composition and recovery rates.",
+                "image": "",
+                "icon": "nutrition",
+                "type": "wide"
+            },
+            {
+                "id": "5",
+                "tag": "SPORTS",
+                "title": "Adult Sports",
+                "description": "Structured leagues, combat sports, and group athletic training for competitive team performance.",
+                "image": "",
+                "icon": "sports",
+                "type": "full"
+            }
         ]
     };
 
@@ -414,6 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderGallery();
         renderTestimonials();
+        renderServices();
     }
 
     function saveContentToServer() {
@@ -696,16 +742,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabGalleryBtn = document.getElementById('tab-gallery-btn');
     const tabTestimonialsBtn = document.getElementById('tab-testimonials-btn');
     const tabMembershipBtn = document.getElementById('tab-membership-btn');
+    const tabServicesBtn = document.getElementById('tab-services-btn');
     const tabContentBtn = document.getElementById('tab-content-btn');
     
     const tabBookingsContent = document.getElementById('tab-bookings-content');
     const tabGalleryContent = document.getElementById('tab-gallery-content');
     const tabTestimonialsContent = document.getElementById('tab-testimonials-content');
     const tabMembershipContent = document.getElementById('tab-membership-content');
+    const tabServicesContent = document.getElementById('tab-services-content');
     const tabContentContent = document.getElementById('tab-content-content');
     
     // Forms
     const contentForm = document.getElementById('admin-content-form');
+    const servicesForm = document.getElementById('admin-services-form');
     const addPhotoForm = document.getElementById('admin-add-photo-form');
     
     // Booking elements
@@ -819,8 +868,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Dashboard Tabs Navigation ---
-    const allTabButtons = [tabBookingsBtn, tabGalleryBtn, tabTestimonialsBtn, tabMembershipBtn, tabContentBtn];
-    const allTabContents = [tabBookingsContent, tabGalleryContent, tabTestimonialsContent, tabMembershipContent, tabContentContent];
+    const allTabButtons = [tabBookingsBtn, tabGalleryBtn, tabTestimonialsBtn, tabMembershipBtn, tabServicesBtn, tabContentBtn];
+    const allTabContents = [tabBookingsContent, tabGalleryContent, tabTestimonialsContent, tabMembershipContent, tabServicesContent, tabContentContent];
     
     function switchTab(activeBtn, activeContent) {
         allTabButtons.forEach(btn => {
@@ -867,6 +916,12 @@ document.addEventListener('DOMContentLoaded', () => {
             loadPlansToEditorForm();
         });
     }
+    if (tabServicesBtn) {
+        tabServicesBtn.addEventListener('click', () => {
+            switchTab(tabServicesBtn, tabServicesContent);
+            loadServicesToEditorForm();
+        });
+    }
     if (tabContentBtn) {
         tabContentBtn.addEventListener('click', () => {
             switchTab(tabContentBtn, tabContentContent);
@@ -881,6 +936,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderGalleryManagerTab();
         renderTestimonialsManagerTab();
         loadPlansToEditorForm();
+        loadServicesToEditorForm();
     }
 
     // --- Tab 1: Bookings Management ---
@@ -1485,6 +1541,198 @@ document.addEventListener('DOMContentLoaded', () => {
                 '"': '&quot;'
             }[tag] || tag)
         );
+    }
+
+    // --- Dynamic Services Engine ---
+    function getServices() {
+        return siteContent.services || [];
+    }
+
+    function renderServices() {
+        const grid = document.getElementById('dynamic-services-grid');
+        if (!grid) return;
+        
+        const services = getServices();
+        grid.innerHTML = '';
+        
+        const serviceIcons = {
+            personal_training: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+            nutrition: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
+            sports: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M6 12A6 6 0 0 1 18 12"/><path d="M12 6A6 6 0 0 1 12 18"/></svg>`
+        };
+
+        services.forEach(s => {
+            const article = document.createElement('article');
+            article.className = `bento-card card-${s.type} reveal visible`;
+            
+            if (s.image) {
+                article.innerHTML = `
+                    <img src="${s.image}" alt="${escapeHTML(s.title)}" class="card-bg-img" loading="lazy">
+                    <div class="card-overlay" aria-hidden="true"></div>
+                    <div class="card-content">
+                        <div class="card-tag">${escapeHTML(s.tag)}</div>
+                        <h3 class="card-title">${escapeHTML(s.title)}</h3>
+                        <p class="card-description">${escapeHTML(s.description)}</p>
+                    </div>
+                `;
+            } else {
+                const iconHTML = serviceIcons[s.icon] || '';
+                article.innerHTML = `
+                    <div class="card-content">
+                        <div class="card-icon" aria-hidden="true">
+                            ${iconHTML}
+                        </div>
+                        <h3 class="card-title">${escapeHTML(s.title)}</h3>
+                        <p class="card-description">${escapeHTML(s.description)}</p>
+                    </div>
+                `;
+            }
+            grid.appendChild(article);
+        });
+    }
+
+    // Services Editor Form Handler
+    function loadServicesToEditorForm() {
+        const services = getServices();
+        if (services.length < 5) return;
+        
+        for (let i = 1; i <= 5; i++) {
+            const s = services[i - 1];
+            if (!s) continue;
+            
+            const titleInput = document.getElementById(`edit-service${i}-title`);
+            const descInput = document.getElementById(`edit-service${i}-desc`);
+            if (titleInput) titleInput.value = s.title || '';
+            if (descInput) descInput.value = s.description || '';
+            
+            if (i === 1 || i === 2) {
+                const tagInput = document.getElementById(`edit-service${i}-tag`);
+                if (tagInput) tagInput.value = s.tag || '';
+                
+                const urlInput = document.getElementById(`edit-service${i}-url`);
+                if (urlInput && s.image) {
+                    urlInput.value = s.image.startsWith('data:') ? '' : s.image;
+                }
+            }
+        }
+    }
+
+    // Radio switcher logic for services 1 & 2
+    for (let i = 1; i <= 2; i++) {
+        const radios = document.getElementsByName(`service${i}-image-source`);
+        const fileGroup = document.getElementById(`service${i}-file-group`);
+        const urlGroup = document.getElementById(`service${i}-url-group`);
+        
+        if (radios) {
+            radios.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    if (e.target.value === 'file') {
+                        if (fileGroup) fileGroup.style.display = 'block';
+                        if (urlGroup) urlGroup.style.display = 'none';
+                        const urlInput = document.getElementById(`edit-service${i}-url`);
+                        if (urlInput) urlInput.required = false;
+                    } else {
+                        if (fileGroup) fileGroup.style.display = 'none';
+                        if (urlGroup) urlGroup.style.display = 'block';
+                        const urlInput = document.getElementById(`edit-service${i}-url`);
+                        if (urlInput) urlInput.required = true;
+                    }
+                });
+            });
+        }
+    }
+
+    if (servicesForm) {
+        servicesForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            if (!siteContent.services) siteContent.services = [];
+            
+            const readImage = (index, callback) => {
+                if (index !== 1 && index !== 2) {
+                    callback("");
+                    return;
+                }
+                
+                const checkedSource = document.querySelector(`input[name="service${index}-image-source"]:checked`);
+                const source = checkedSource ? checkedSource.value : 'file';
+                
+                if (source === 'url') {
+                    const urlInput = document.getElementById(`edit-service${index}-url`);
+                    callback(urlInput ? urlInput.value.trim() : "");
+                } else {
+                    const fileInput = document.getElementById(`edit-service${index}-file`);
+                    if (fileInput && fileInput.files.length > 0) {
+                        const file = fileInput.files[0];
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            callback(event.target.result);
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        const current = siteContent.services[index - 1];
+                        callback(current ? current.image : "");
+                    }
+                }
+            };
+            
+            readImage(1, (img1) => {
+                readImage(2, (img2) => {
+                    siteContent.services[0] = {
+                        id: "1",
+                        tag: document.getElementById('edit-service1-tag').value.trim(),
+                        title: document.getElementById('edit-service1-title').value.trim(),
+                        description: document.getElementById('edit-service1-desc').value.trim(),
+                        image: img1,
+                        type: "large"
+                    };
+                    
+                    siteContent.services[1] = {
+                        id: "2",
+                        tag: document.getElementById('edit-service2-tag').value.trim(),
+                        title: document.getElementById('edit-service2-title').value.trim(),
+                        description: document.getElementById('edit-service2-desc').value.trim(),
+                        image: img2,
+                        type: "medium"
+                    };
+                    
+                    siteContent.services[2] = {
+                        id: "3",
+                        tag: "PT",
+                        title: document.getElementById('edit-service3-title').value.trim(),
+                        description: document.getElementById('edit-service3-desc').value.trim(),
+                        image: "",
+                        icon: "personal_training",
+                        type: "small"
+                    };
+                    
+                    siteContent.services[3] = {
+                        id: "4",
+                        tag: "NUTRITION",
+                        title: document.getElementById('edit-service4-title').value.trim(),
+                        description: document.getElementById('edit-service4-desc').value.trim(),
+                        image: "",
+                        icon: "nutrition",
+                        type: "wide"
+                    };
+                    
+                    siteContent.services[4] = {
+                        id: "5",
+                        tag: "SPORTS",
+                        title: document.getElementById('edit-service5-title').value.trim(),
+                        description: document.getElementById('edit-service5-desc').value.trim(),
+                        image: "",
+                        icon: "sports",
+                        type: "full"
+                    };
+                    
+                    saveContentToServer().then(() => {
+                        alert('Services successfully updated and saved to server!');
+                        applyContentToDOM();
+                    });
+                });
+            });
+        });
     }
 
     // Check if on membership page during init to trigger initial render

@@ -115,6 +115,51 @@ module.exports = (req, res) => {
               "ctaText": "START CHAMPION",
               "badge": "ULTIMATE"
             }
+          ],
+          "services": [
+            {
+              "id": "1",
+              "tag": "HIGH INTENSITY",
+              "title": "CrossFit & HIIT",
+              "description": "Explosive conditioning circuits and functional workouts designed to shatter plateaus and build relentless athletic endurance.",
+              "image": "assets/crossfit.png",
+              "type": "large"
+            },
+            {
+              "id": "2",
+              "tag": "STRENGTH",
+              "title": "Weight Training",
+              "description": "Premium free weights, precision machinery, and specialized powerlifting platforms for targeted hypertrophy and max effort lifts.",
+              "image": "assets/bodybuilding.png",
+              "type": "medium"
+            },
+            {
+              "id": "3",
+              "tag": "PT",
+              "title": "Personal Training",
+              "description": "1-on-1 bio-mechanic training with certified coaches committed to your physical evolution.",
+              "image": "",
+              "icon": "personal_training",
+              "type": "small"
+            },
+            {
+              "id": "4",
+              "tag": "NUTRITION",
+              "title": "Nutrition Consulting",
+              "description": "Custom macro-nutritional programming and supplement strategies backed by metabolic science to optimize body composition and recovery rates.",
+              "image": "",
+              "icon": "nutrition",
+              "type": "wide"
+            },
+            {
+              "id": "5",
+              "tag": "SPORTS",
+              "title": "Adult Sports",
+              "description": "Structured leagues, combat sports, and group athletic training for competitive team performance.",
+              "image": "",
+              "icon": "sports",
+              "type": "full"
+            }
           ]
         };
         fs.writeFileSync(filePath, JSON.stringify(defaultData, null, 2));

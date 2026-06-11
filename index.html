@@ -304,61 +304,8 @@
                 <p class="section-subtitle">Championship-grade coaching and wellness infrastructure tailored for elite performance.</p>
             </div>
             
-            <div class="bento-grid">
-                <!-- Card 1: CrossFit & HIIT -->
-                <article class="bento-card card-large reveal">
-                    <img src="assets/crossfit.png" alt="Relentless functional training and high-intensity kettlebell workouts at THE FITNESS HUB in Kurla, Mumbai" class="card-bg-img" loading="lazy">
-                    <div class="card-overlay" aria-hidden="true"></div>
-                    <div class="card-content">
-                        <div class="card-tag">HIGH INTENSITY</div>
-                        <h3 class="card-title">CrossFit & HIIT</h3>
-                        <p class="card-description">Explosive conditioning circuits and functional workouts designed to shatter plateaus and build relentless athletic endurance.</p>
-                    </div>
-                </article>
-
-                <!-- Card 2: Weight Training -->
-                <article class="bento-card card-medium reveal">
-                    <img src="assets/bodybuilding.png" alt="Premium bodybuilding and heavy powerlifting weight training plates at THE FITNESS HUB in Kurla, Mumbai" class="card-bg-img" loading="lazy">
-                    <div class="card-overlay" aria-hidden="true"></div>
-                    <div class="card-content">
-                        <div class="card-tag">STRENGTH</div>
-                        <h3 class="card-title">Weight Training</h3>
-                        <p class="card-description">Premium free weights, precision machinery, and specialized powerlifting platforms for targeted hypertrophy and max effort lifts.</p>
-                    </div>
-                </article>
-
-                <!-- Card 3: Personal Training -->
-                <article class="bento-card card-small reveal">
-                    <div class="card-content">
-                        <div class="card-icon" aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                        </div>
-                        <h3 class="card-title">Personal Training</h3>
-                        <p class="card-description">1-on-1 bio-mechanic training with certified coaches committed to your physical evolution.</p>
-                    </div>
-                </article>
-
-                <!-- Card 4: Nutrition Consulting -->
-                <article class="bento-card card-wide reveal">
-                    <div class="card-content">
-                        <div class="card-icon" aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                        </div>
-                        <h3 class="card-title">Nutrition Consulting</h3>
-                        <p class="card-description">Custom macro-nutritional programming and supplement strategies backed by metabolic science to optimize body composition and recovery rates.</p>
-                    </div>
-                </article>
-
-                <!-- Card 5: Adult Sports -->
-                <article class="bento-card card-full reveal">
-                    <div class="card-content">
-                        <div class="card-icon" aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M6 12A6 6 0 0 1 18 12"/><path d="M12 6A6 6 0 0 1 12 18"/></svg>
-                        </div>
-                        <h3 class="card-title">Adult Sports</h3>
-                        <p class="card-description">Structured leagues, combat sports, and group athletic training for competitive team performance.</p>
-                    </div>
-                </article>
+            <div class="bento-grid" id="dynamic-services-grid">
+                <!-- Dynamically Loaded Services via JS -->
             </div>
         </section>
 
@@ -541,6 +488,7 @@
                     <button class="tab-btn" id="tab-gallery-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">GALLERY</button>
                     <button class="tab-btn" id="tab-testimonials-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">TESTIMONIALS</button>
                     <button class="tab-btn" id="tab-membership-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">PRICING PLANS</button>
+                    <button class="tab-btn" id="tab-services-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">SERVICES</button>
                     <button class="tab-btn" id="tab-content-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">PAGE TEXTS</button>
                 </div>
                 
@@ -725,6 +673,118 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.75rem; width: auto; margin-top: 1rem;">SAVE PLANS</button>
+                    </form>
+                </div>
+                
+                <!-- Tab: Services Content -->
+                <div class="tab-content" id="tab-services-content" style="display: none;">
+                    <form id="admin-services-form" class="admin-form" style="border: 1px solid var(--color-border-dim); padding: 1.5rem; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 1.5rem;">
+                        <h3 style="font-size: 1rem; letter-spacing: 0.05em; border-bottom: 1px solid var(--color-border-dim); padding-bottom: 0.5rem;">SERVICES SECTION EDITOR</h3>
+                        
+                        <!-- Service 1 -->
+                        <div class="service-edit-card" style="border: 1px solid var(--color-border-dim); padding: 1.2rem; background: var(--color-bg-pure);">
+                            <h4 style="font-family: var(--font-heading); font-size: 0.8rem; color: var(--color-text-white); margin-bottom: 1rem;">SERVICE 1 (CrossFit & HIIT)</h4>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-service1-tag">TAG</label>
+                                <input type="text" id="edit-service1-tag" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-service1-title">TITLE</label>
+                                <input type="text" id="edit-service1-title" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-service1-desc">DESCRIPTION</label>
+                                <textarea id="edit-service1-desc" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label style="font-family: var(--font-heading); font-size: 0.7rem; color: var(--color-text-gray); margin-bottom: 0.5rem; display: block;">IMAGE SOURCE</label>
+                                <div style="display: flex; gap: 1.5rem; font-size: 0.9rem;">
+                                    <label style="cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-weight: 300;"><input type="radio" name="service1-image-source" value="file" checked style="accent-color: white;"> Upload Local File</label>
+                                    <label style="cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-weight: 300;"><input type="radio" name="service1-image-source" value="url" style="accent-color: white;"> Web URL</label>
+                                </div>
+                            </div>
+                            <div class="form-group" id="service1-file-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-service1-file">SELECT LOCAL IMAGE</label>
+                                <input type="file" id="edit-service1-file" accept="image/*" style="width: 100%; padding: 0.5rem; background: var(--color-bg-primary); border: 1px solid var(--color-border-dim); color: white;">
+                            </div>
+                            <div class="form-group" id="service1-url-group" style="margin-bottom: 0.8rem; display: none;">
+                                <label for="edit-service1-url">IMAGE URL</label>
+                                <input type="text" id="edit-service1-url" placeholder="e.g., assets/crossfit.png or https://example.com/image.jpg">
+                            </div>
+                        </div>
+
+                        <!-- Service 2 -->
+                        <div class="service-edit-card" style="border: 1px solid var(--color-border-dim); padding: 1.2rem; background: var(--color-bg-pure);">
+                            <h4 style="font-family: var(--font-heading); font-size: 0.8rem; color: var(--color-text-white); margin-bottom: 1rem;">SERVICE 2 (Weight Training)</h4>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-service2-tag">TAG</label>
+                                <input type="text" id="edit-service2-tag" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-service2-title">TITLE</label>
+                                <input type="text" id="edit-service2-title" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-service2-desc">DESCRIPTION</label>
+                                <textarea id="edit-service2-desc" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label style="font-family: var(--font-heading); font-size: 0.7rem; color: var(--color-text-gray); margin-bottom: 0.5rem; display: block;">IMAGE SOURCE</label>
+                                <div style="display: flex; gap: 1.5rem; font-size: 0.9rem;">
+                                    <label style="cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-weight: 300;"><input type="radio" name="service2-image-source" value="file" checked style="accent-color: white;"> Upload Local File</label>
+                                    <label style="cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-weight: 300;"><input type="radio" name="service2-image-source" value="url" style="accent-color: white;"> Web URL</label>
+                                </div>
+                            </div>
+                            <div class="form-group" id="service2-file-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-service2-file">SELECT LOCAL IMAGE</label>
+                                <input type="file" id="edit-service2-file" accept="image/*" style="width: 100%; padding: 0.5rem; background: var(--color-bg-primary); border: 1px solid var(--color-border-dim); color: white;">
+                            </div>
+                            <div class="form-group" id="service2-url-group" style="margin-bottom: 0.8rem; display: none;">
+                                <label for="edit-service2-url">IMAGE URL</label>
+                                <input type="text" id="edit-service2-url" placeholder="e.g., assets/bodybuilding.png or https://example.com/image.jpg">
+                            </div>
+                        </div>
+
+                        <!-- Service 3 -->
+                        <div class="service-edit-card" style="border: 1px solid var(--color-border-dim); padding: 1.2rem; background: var(--color-bg-pure);">
+                            <h4 style="font-family: var(--font-heading); font-size: 0.8rem; color: var(--color-text-white); margin-bottom: 1rem;">SERVICE 3 (Personal Training)</h4>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-service3-title">TITLE</label>
+                                <input type="text" id="edit-service3-title" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-service3-desc">DESCRIPTION</label>
+                                <textarea id="edit-service3-desc" rows="3" required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Service 4 -->
+                        <div class="service-edit-card" style="border: 1px solid var(--color-border-dim); padding: 1.2rem; background: var(--color-bg-pure);">
+                            <h4 style="font-family: var(--font-heading); font-size: 0.8rem; color: var(--color-text-white); margin-bottom: 1rem;">SERVICE 4 (Nutrition Consulting)</h4>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-service4-title">TITLE</label>
+                                <input type="text" id="edit-service4-title" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-service4-desc">DESCRIPTION</label>
+                                <textarea id="edit-service4-desc" rows="3" required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Service 5 -->
+                        <div class="service-edit-card" style="border: 1px solid var(--color-border-dim); padding: 1.2rem; background: var(--color-bg-pure);">
+                            <h4 style="font-family: var(--font-heading); font-size: 0.8rem; color: var(--color-text-white); margin-bottom: 1rem;">SERVICE 5 (Adult Sports)</h4>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-service5-title">TITLE</label>
+                                <input type="text" id="edit-service5-title" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-service5-desc">DESCRIPTION</label>
+                                <textarea id="edit-service5-desc" rows="3" required></textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.75rem; width: auto; margin-top: 1rem;">SAVE SERVICES</button>
                     </form>
                 </div>
                 
