@@ -6,7 +6,6 @@ const getFilePath = () => {
   const tmpPath = path.join('/tmp', fileName);
   const localPath = path.join(process.cwd(), fileName);
   
-  // If running in serverless environment, copy from bundle to /tmp if not already present
   if (!fs.existsSync(tmpPath)) {
     try {
       if (fs.existsSync(localPath)) {
@@ -33,6 +32,8 @@ module.exports = (req, res) => {
           heroSubtitle2: "Precision machinery and specialized platforms for max effort strength training.",
           heroTitle3: "JOIN THE FITNESS HUB.",
           heroSubtitle3: "Unleash your potential today. Book a session with our championship-grade coaching team.",
+          aboutHeading: "THE PHILOSOPHY",
+          aboutPhoto: "assets/about_img.jpg",
           aboutSubtitle: "We don't build gym memberships. We forge relentless athletic capability and physical fortitude.",
           aboutStory1: "Founded in Kurla, Mumbai, THE FITNESS HUB was established to bridge the gap between commercialized fitness franchises and hardcore strength athletics. We set out to create a sanctuary where physical potential is realized through raw science, top-tier infrastructure, and unyielding discipline.",
           aboutStory2: "Every bar, platform, and program at the Hub is curated for serious results. We offer a high-intensity, zero-compromise environment designed to push you past your boundaries.",
@@ -43,9 +44,80 @@ module.exports = (req, res) => {
             { "src": "assets/gallery_1.png", "caption": "POWERLIFTING PLATFORM" },
             { "src": "assets/gallery_2.png", "caption": "CHAMPIONSHIP GRADE DUMBBELLS" },
             { "src": "assets/gallery_3.png", "caption": "PULL-UP RIG AND RIGGING AREA" }
+          ],
+          testimonials: [
+            {
+              "id": "1",
+              "rating": 5,
+              "quote": "Amazing atmosphere, top-quality equipment, and highly supportive trainers.",
+              "authorName": "Anshuman S.",
+              "authorTitle": "Verified Member",
+              "avatar": "AS"
+            },
+            {
+              "id": "2",
+              "rating": 5,
+              "quote": "Perfect place for both beginners and experienced people.",
+              "authorName": "Rahul K.",
+              "authorTitle": "Powerlifter",
+              "avatar": "RK"
+            },
+            {
+              "id": "3",
+              "rating": 5,
+              "quote": "Environment, proper and good condition machine.",
+              "authorName": "Pratik D.",
+              "authorTitle": "Bodybuilder",
+              "avatar": "PD"
+            }
+          ],
+          membershipPlans: [
+            {
+              "id": "1",
+              "name": "BASIC STRENGTH",
+              "price": "$49",
+              "period": "MONTH",
+              "features": [
+                "Access to Strength Floor",
+                "Standard Locker Room access",
+                "1 Coach Consultation/mo"
+              ],
+              "ctaText": "JOIN NOW",
+              "badge": ""
+            },
+            {
+              "id": "2",
+              "name": "ELITE ATHLETE",
+              "price": "$89",
+              "period": "MONTH",
+              "features": [
+                "24/7 Facility Access",
+                "CrossFit & HIIT classes",
+                "Unrestricted platforms",
+                "Custom Macro program",
+                "Monthly body composition scan"
+              ],
+              "ctaText": "GO ELITE",
+              "badge": "POPULAR"
+            },
+            {
+              "id": "3",
+              "name": "CHAMPIONSHIP ELITE",
+              "price": "$199",
+              "period": "MONTH",
+              "features": [
+                "All Elite Athlete benefits",
+                "Weekly 1-on-1 coaching (1hr)",
+                "Access to Recovery Spa",
+                "Complimentary post-workout shakes",
+                "Priority platform reservation"
+              ],
+              "ctaText": "START CHAMPION",
+              "badge": "ULTIMATE"
+            }
           ]
         };
-        return res.status(200).json(defaultData);
+        fs.writeFileSync(filePath, JSON.stringify(defaultData, null, 2));
       }
       const fileData = fs.readFileSync(filePath, 'utf8');
       return res.status(200).json(JSON.parse(fileData));

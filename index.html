@@ -155,6 +155,7 @@
                 <li><a href="#about" class="nav-link">About</a></li>
                 <li><a href="#gallery" class="nav-link">Gallery</a></li>
                 <li><a href="#services" class="nav-link">Services</a></li>
+                <li><a href="membership" class="nav-link">Membership</a></li>
                 <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
                 <li class="mobile-cta-li"><a href="#contact" class="btn btn-primary btn-mobile-cta" aria-label="Join THE FITNESS HUB">JOIN THE HUB</a></li>
@@ -233,13 +234,13 @@
                 <div class="about-split-layout">
                     <!-- Left Side: Photo -->
                     <div class="about-photo-wrapper reveal">
-                        <img src="assets/about_img.jpg" alt="Elite head coach and training staff at THE FITNESS HUB in Kurla, Mumbai" class="about-photo">
+                        <img src="assets/about_img.jpg" alt="Elite head coach and training staff at THE FITNESS HUB in Kurla, Mumbai" class="about-photo" id="dyn-aboutPhoto">
                     </div>
 
                     <!-- Right Side: Description and Coaches -->
                     <div class="about-info-wrapper reveal">
                         <div class="section-header">
-                            <h2 class="section-title">THE PHILOSOPHY</h2>
+                            <h2 class="section-title" id="dyn-aboutHeading">THE PHILOSOPHY</h2>
                             <p class="section-subtitle" id="dyn-aboutSubtitle">We don't build gym memberships. We forge relentless athletic capability and physical fortitude.</p>
                         </div>
                         
@@ -369,48 +370,8 @@
                     <p class="section-subtitle">Real feedback from the dedicated lifters and athletes who call the Hub home.</p>
                 </div>
                 
-                <div class="testimonials-grid">
-                    <article class="testimonial-card reveal">
-                        <div class="testimonial-rating" aria-label="5 out of 5 stars">⭐⭐⭐⭐⭐</div>
-                        <blockquote class="testimonial-quote">
-                            "Amazing atmosphere, top-quality equipment, and highly supportive trainers."
-                        </blockquote>
-                        <div class="testimonial-author">
-                            <span class="author-avatar" aria-hidden="true">AS</span>
-                            <div>
-                                <h4 class="author-name">Anshuman S.</h4>
-                                <p class="author-title">Verified Member</p>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="testimonial-card reveal">
-                        <div class="testimonial-rating" aria-label="5 out of 5 stars">⭐⭐⭐⭐⭐</div>
-                        <blockquote class="testimonial-quote">
-                            "Perfect place for both beginners and experienced people."
-                        </blockquote>
-                        <div class="testimonial-author">
-                            <span class="author-avatar" aria-hidden="true">RK</span>
-                            <div>
-                                <h4 class="author-name">Rahul K.</h4>
-                                <p class="author-title">Powerlifter</p>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="testimonial-card reveal">
-                        <div class="testimonial-rating" aria-label="5 out of 5 stars">⭐⭐⭐⭐⭐</div>
-                        <blockquote class="testimonial-quote">
-                            "Environment, proper and good condition machine."
-                        </blockquote>
-                        <div class="testimonial-author">
-                            <span class="author-avatar" aria-hidden="true">PD</span>
-                            <div>
-                                <h4 class="author-name">Pratik D.</h4>
-                                <p class="author-title">Bodybuilder</p>
-                            </div>
-                        </div>
-                    </article>
+                <div class="testimonials-grid" id="dynamic-testimonials-grid">
+                    <!-- Dynamically Loaded Testimonials -->
                 </div>
             </div>
         </section>
@@ -575,10 +536,12 @@
                 </div>
                 
                 <!-- Tabs Navigation -->
-                <div class="dashboard-tabs" style="display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--color-border-dim); padding-bottom: 1rem;">
+                <div class="dashboard-tabs" style="display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--color-border-dim); padding-bottom: 1rem; flex-wrap: wrap;">
                     <button class="tab-btn active" id="tab-bookings-btn" style="background: none; border: none; color: var(--color-text-white); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid var(--color-text-white);">BOOKINGS (<span id="bookings-count">0</span>)</button>
-                    <button class="tab-btn" id="tab-gallery-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">GALLERY MANAGER</button>
-                    <button class="tab-btn" id="tab-content-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">CONTENT EDITOR</button>
+                    <button class="tab-btn" id="tab-gallery-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">GALLERY</button>
+                    <button class="tab-btn" id="tab-testimonials-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">TESTIMONIALS</button>
+                    <button class="tab-btn" id="tab-membership-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">PRICING PLANS</button>
+                    <button class="tab-btn" id="tab-content-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">PAGE TEXTS</button>
                 </div>
                 
                 <!-- Tab 1: Bookings Content -->
@@ -627,11 +590,148 @@
                         <!-- Dynamically Loaded Photos -->
                     </div>
                 </div>
+
+                <!-- Tab 3: Testimonials Content -->
+                <div class="tab-content" id="tab-testimonials-content" style="display: none;">
+                    <!-- Add Testimonial Form -->
+                    <form id="admin-add-testimonial-form" class="admin-form" style="border: 1px solid var(--color-border-dim); padding: 1.5rem; margin-bottom: 2rem;">
+                        <h3 style="font-size: 1rem; margin-bottom: 1rem; letter-spacing: 0.05em;">ADD NEW TESTIMONIAL</h3>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="test-quote">QUOTE / REVIEW TEXT *</label>
+                            <textarea id="test-quote" rows="3" placeholder="Enter athlete feedback..." required></textarea>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="test-author">AUTHOR NAME *</label>
+                            <input type="text" id="test-author" placeholder="e.g. John Doe" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="test-title">AUTHOR TITLE *</label>
+                            <input type="text" id="test-title" placeholder="e.g. Powerlifter / Member" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="test-avatar">AVATAR INITIALS *</label>
+                            <input type="text" id="test-avatar" max-length="2" placeholder="e.g. JD" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label for="test-rating">RATING *</label>
+                            <select id="test-rating">
+                                <option value="5">⭐⭐⭐⭐⭐ (5 Stars)</option>
+                                <option value="4">⭐⭐⭐⭐ (4 Stars)</option>
+                                <option value="3">⭐⭐⭐ (3 Stars)</option>
+                                <option value="2">⭐⭐ (2 Stars)</option>
+                                <option value="1">⭐ (1 Star)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.75rem; width: auto;">ADD TESTIMONIAL</button>
+                    </form>
+
+                    <!-- Manage existing list -->
+                    <h3 style="font-size: 1rem; margin-bottom: 1rem; letter-spacing: 0.05em; border-bottom: 1px solid var(--color-border-dim); padding-bottom: 0.5rem;">CURRENT TESTIMONIALS</h3>
+                    <div class="testimonials-manager-list" id="testimonials-manager-list" style="display: flex; flex-direction: column; gap: 1rem; max-height: 300px; overflow-y: auto; padding-right: 0.5rem;">
+                        <!-- Dynamically Loaded Testimonials -->
+                    </div>
+                </div>
+
+                <!-- Tab 4: Membership Plans Content -->
+                <div class="tab-content" id="tab-membership-content" style="display: none;">
+                    <form id="admin-membership-form" class="admin-form" style="border: 1px solid var(--color-border-dim); padding: 1.5rem; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 1.5rem;">
+                        <h3 style="font-size: 1rem; letter-spacing: 0.05em; border-bottom: 1px solid var(--color-border-dim); padding-bottom: 0.5rem;">MEMBERSHIP PRICING PLANS</h3>
+                        
+                        <!-- Plan 1 -->
+                        <div class="membership-plan-edit-card" style="border: 1px solid var(--color-border-dim); padding: 1.2rem; background: var(--color-bg-pure);">
+                            <h4 style="font-family: var(--font-heading); font-size: 0.8rem; color: var(--color-text-white); margin-bottom: 1rem;">PLAN 1 (BASIC)</h4>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-plan1-name">PLAN NAME</label>
+                                <input type="text" id="edit-plan1-name" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-plan1-price">PRICE</label>
+                                <input type="text" id="edit-plan1-price" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-plan1-period">BILLING PERIOD</label>
+                                <input type="text" id="edit-plan1-period" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-plan1-features">FEATURES (One per line)</label>
+                                <textarea id="edit-plan1-features" rows="4" required></textarea>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-plan1-cta">CTA TEXT</label>
+                                <input type="text" id="edit-plan1-cta" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-plan1-badge">BADGE (Optional)</label>
+                                <input type="text" id="edit-plan1-badge">
+                            </div>
+                        </div>
+
+                        <!-- Plan 2 -->
+                        <div class="membership-plan-edit-card" style="border: 1px solid var(--color-border-dim); padding: 1.2rem; background: var(--color-bg-pure);">
+                            <h4 style="font-family: var(--font-heading); font-size: 0.8rem; color: var(--color-text-white); margin-bottom: 1rem;">PLAN 2 (ELITE)</h4>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-plan2-name">PLAN NAME</label>
+                                <input type="text" id="edit-plan2-name" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-plan2-price">PRICE</label>
+                                <input type="text" id="edit-plan2-price" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-plan2-period">BILLING PERIOD</label>
+                                <input type="text" id="edit-plan2-period" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-plan2-features">FEATURES (One per line)</label>
+                                <textarea id="edit-plan2-features" rows="4" required></textarea>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-plan2-cta">CTA TEXT</label>
+                                <input type="text" id="edit-plan2-cta" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-plan2-badge">BADGE (Optional)</label>
+                                <input type="text" id="edit-plan2-badge">
+                            </div>
+                        </div>
+
+                        <!-- Plan 3 -->
+                        <div class="membership-plan-edit-card" style="border: 1px solid var(--color-border-dim); padding: 1.2rem; background: var(--color-bg-pure);">
+                            <h4 style="font-family: var(--font-heading); font-size: 0.8rem; color: var(--color-text-white); margin-bottom: 1rem;">PLAN 3 (ULTIMATE)</h4>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-plan3-name">PLAN NAME</label>
+                                <input type="text" id="edit-plan3-name" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-plan3-price">PRICE</label>
+                                <input type="text" id="edit-plan3-price" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-plan3-period">BILLING PERIOD</label>
+                                <input type="text" id="edit-plan3-period" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-plan3-features">FEATURES (One per line)</label>
+                                <textarea id="edit-plan3-features" rows="4" required></textarea>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.8rem;">
+                                <label for="edit-plan3-cta">CTA TEXT</label>
+                                <input type="text" id="edit-plan3-cta" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-plan3-badge">BADGE (Optional)</label>
+                                <input type="text" id="edit-plan3-badge">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.75rem; width: auto; margin-top: 1rem;">SAVE PLANS</button>
+                    </form>
+                </div>
                 
-                <!-- Tab 3: Content Editor Content -->
+                <!-- Tab 5: Content Editor Content -->
                 <div class="tab-content" id="tab-content-content" style="display: none;">
                     <form id="admin-content-form" class="admin-form" style="border: 1px solid var(--color-border-dim); padding: 1.5rem; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 1.2rem;">
-                        <h3 style="font-size: 1rem; letter-spacing: 0.05em; border-bottom: 1px solid var(--color-border-dim); padding-bottom: 0.5rem;">WEBSITE TEXT EDITOR</h3>
+                        <h3 style="font-size: 1rem; letter-spacing: 0.05em; border-bottom: 1px solid var(--color-border-dim); padding-bottom: 0.5rem;">WEBSITE TEXT & PHOTO EDITOR</h3>
                         
                         <h4 style="font-family: var(--font-heading); font-size: 0.8rem; color: var(--color-text-white); margin-top: 0.5rem;">HERO PHASE 1 (SETUP)</h4>
                         <div class="form-group">
@@ -665,6 +765,10 @@
                         
                         <h4 style="font-family: var(--font-heading); font-size: 0.8rem; color: var(--color-text-white); margin-top: 0.5rem;">ABOUT SECTION</h4>
                         <div class="form-group">
+                            <label for="edit-aboutHeading">ABOUT TITLE / HEADING</label>
+                            <input type="text" id="edit-aboutHeading" required>
+                        </div>
+                        <div class="form-group">
                             <label for="edit-aboutSubtitle">PHILOSOPHY SUBTITLE</label>
                             <textarea id="edit-aboutSubtitle" rows="2" required></textarea>
                         </div>
@@ -675,6 +779,23 @@
                         <div class="form-group">
                             <label for="edit-aboutStory2">STORY PARAGRAPH 2</label>
                             <textarea id="edit-aboutStory2" rows="4" required></textarea>
+                        </div>
+
+                        <h4 style="font-family: var(--font-heading); font-size: 0.8rem; color: var(--color-text-white); margin-top: 0.5rem;">ABOUT PAGE PHOTO</h4>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label style="font-family: var(--font-heading); font-size: 0.7rem; color: var(--color-text-gray); margin-bottom: 0.5rem; display: block;">PHOTO SOURCE</label>
+                            <div class="about-photo-toggle-row" style="display: flex; gap: 1.5rem; font-size: 0.9rem;">
+                                <label style="cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-weight: 300;"><input type="radio" name="about-photo-source" value="file" checked style="accent-color: white;"> Upload Local File</label>
+                                <label style="cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-weight: 300;"><input type="radio" name="about-photo-source" value="url" style="accent-color: white;"> Web URL</label>
+                            </div>
+                        </div>
+                        <div class="form-group" id="about-photo-file-group" style="margin-bottom: 1.2rem;">
+                            <label for="edit-aboutPhotoFile">SELECT LOCAL ABOUT IMAGE</label>
+                            <input type="file" id="edit-aboutPhotoFile" accept="image/*" style="width: 100%; padding: 0.5rem; background: var(--color-bg-primary); border: 1px solid var(--color-border-dim); color: white;">
+                        </div>
+                        <div class="form-group" id="about-photo-url-group" style="margin-bottom: 1.2rem; display: none;">
+                            <label for="edit-aboutPhotoUrl">ABOUT IMAGE URL</label>
+                            <input type="url" id="edit-aboutPhotoUrl" placeholder="https://example.com/about.jpg">
                         </div>
                         
                         <button type="submit" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.75rem; width: auto; margin-top: 1rem;">SAVE WEBSITE CONTENT</button>

@@ -259,6 +259,8 @@ document.addEventListener('DOMContentLoaded', () => {
         heroSubtitle2: "Precision machinery and specialized platforms for max effort strength training.",
         heroTitle3: "JOIN THE FITNESS HUB.",
         heroSubtitle3: "Unleash your potential today. Book a session with our championship-grade coaching team.",
+        aboutHeading: "THE PHILOSOPHY",
+        aboutPhoto: "assets/about_img.jpg",
         aboutSubtitle: "We don't build gym memberships. We forge relentless athletic capability and physical fortitude.",
         aboutStory1: "Founded in Kurla, Mumbai, THE FITNESS HUB was established to bridge the gap between commercialized fitness franchises and hardcore strength athletics. We set out to create a sanctuary where physical potential is realized through raw science, top-tier infrastructure, and unyielding discipline.",
         aboutStory2: "Every bar, platform, and program at the Hub is curated for serious results. We offer a high-intensity, zero-compromise environment designed to push you past your boundaries.",
@@ -269,6 +271,77 @@ document.addEventListener('DOMContentLoaded', () => {
             { "src": "assets/gallery_1.png", "caption": "POWERLIFTING PLATFORM" },
             { "src": "assets/gallery_2.png", "caption": "CHAMPIONSHIP GRADE DUMBBELLS" },
             { "src": "assets/gallery_3.png", "caption": "PULL-UP RIG AND RIGGING AREA" }
+        ],
+        testimonials: [
+            {
+                "id": "1",
+                "rating": 5,
+                "quote": "Amazing atmosphere, top-quality equipment, and highly supportive trainers.",
+                "authorName": "Anshuman S.",
+                "authorTitle": "Verified Member",
+                "avatar": "AS"
+            },
+            {
+                "id": "2",
+                "rating": 5,
+                "quote": "Perfect place for both beginners and experienced people.",
+                "authorName": "Rahul K.",
+                "authorTitle": "Powerlifter",
+                "avatar": "RK"
+            },
+            {
+                "id": "3",
+                "rating": 5,
+                "quote": "Environment, proper and good condition machine.",
+                "authorName": "Pratik D.",
+                "authorTitle": "Bodybuilder",
+                "avatar": "PD"
+            }
+        ],
+        membershipPlans: [
+            {
+                "id": "1",
+                "name": "BASIC STRENGTH",
+                "price": "$49",
+                "period": "MONTH",
+                "features": [
+                    "Access to Strength Floor",
+                    "Standard Locker Room access",
+                    "1 Coach Consultation/mo"
+                ],
+                "ctaText": "JOIN NOW",
+                "badge": ""
+            },
+            {
+                "id": "2",
+                "name": "ELITE ATHLETE",
+                "price": "$89",
+                "period": "MONTH",
+                "features": [
+                    "24/7 Facility Access",
+                    "CrossFit & HIIT classes",
+                    "Unrestricted platforms",
+                    "Custom Macro program",
+                    "Monthly body composition scan"
+                ],
+                "ctaText": "GO ELITE",
+                "badge": "POPULAR"
+            },
+            {
+                "id": "3",
+                "name": "CHAMPIONSHIP ELITE",
+                "price": "$199",
+                "period": "MONTH",
+                "features": [
+                    "All Elite Athlete benefits",
+                    "Weekly 1-on-1 coaching (1hr)",
+                    "Access to Recovery Spa",
+                    "Complimentary post-workout shakes",
+                    "Priority platform reservation"
+                ],
+                "ctaText": "START CHAMPION",
+                "badge": "ULTIMATE"
+            }
         ]
     };
 
@@ -281,6 +354,11 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 siteContent = data;
                 applyContentToDOM();
+                
+                // If we are on membership page, render plans
+                if (document.getElementById('dynamic-pricing-grid')) {
+                    renderPricingPlans();
+                }
             })
             .catch(err => {
                 console.warn('Backend API not available, loading content from localStorage fallback:', err);
@@ -293,6 +371,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
                 applyContentToDOM();
+                
+                // If we are on membership page, render plans
+                if (document.getElementById('dynamic-pricing-grid')) {
+                    renderPricingPlans();
+                }
             });
     }
 
@@ -307,7 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const el = document.getElementById(id);
             if (el) {
                 const key = id.replace('dyn-', '');
-                if (siteContent[key]) {
+                if (siteContent[key] !== undefined) {
                     if (key === 'aboutStory1' || key === 'aboutStory2') {
                         el.innerHTML = siteContent[key];
                     } else {
@@ -316,7 +399,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
+        
+        // Update About photo
+        const aboutPhotoEl = document.getElementById('dyn-aboutPhoto');
+        if (aboutPhotoEl && siteContent.aboutPhoto) {
+            aboutPhotoEl.src = siteContent.aboutPhoto;
+        }
+        
+        // Update About heading
+        const aboutHeadingEl = document.getElementById('dyn-aboutHeading');
+        if (aboutHeadingEl && siteContent.aboutHeading) {
+            aboutHeadingEl.textContent = siteContent.aboutHeading;
+        }
+
         renderGallery();
+        renderTestimonials();
     }
 
     function saveContentToServer() {
@@ -597,10 +694,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Tab buttons and containers
     const tabBookingsBtn = document.getElementById('tab-bookings-btn');
     const tabGalleryBtn = document.getElementById('tab-gallery-btn');
+    const tabTestimonialsBtn = document.getElementById('tab-testimonials-btn');
+    const tabMembershipBtn = document.getElementById('tab-membership-btn');
     const tabContentBtn = document.getElementById('tab-content-btn');
     
     const tabBookingsContent = document.getElementById('tab-bookings-content');
     const tabGalleryContent = document.getElementById('tab-gallery-content');
+    const tabTestimonialsContent = document.getElementById('tab-testimonials-content');
+    const tabMembershipContent = document.getElementById('tab-membership-content');
     const tabContentContent = document.getElementById('tab-content-content');
     
     // Forms
@@ -718,8 +819,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Dashboard Tabs Navigation ---
-    const allTabButtons = [tabBookingsBtn, tabGalleryBtn, tabContentBtn];
-    const allTabContents = [tabBookingsContent, tabGalleryContent, tabContentContent];
+    const allTabButtons = [tabBookingsBtn, tabGalleryBtn, tabTestimonialsBtn, tabMembershipBtn, tabContentBtn];
+    const allTabContents = [tabBookingsContent, tabGalleryContent, tabTestimonialsContent, tabMembershipContent, tabContentContent];
     
     function switchTab(activeBtn, activeContent) {
         allTabButtons.forEach(btn => {
@@ -754,18 +855,32 @@ document.addEventListener('DOMContentLoaded', () => {
             renderGalleryManagerTab();
         });
     }
+    if (tabTestimonialsBtn) {
+        tabTestimonialsBtn.addEventListener('click', () => {
+            switchTab(tabTestimonialsBtn, tabTestimonialsContent);
+            renderTestimonialsManagerTab();
+        });
+    }
+    if (tabMembershipBtn) {
+        tabMembershipBtn.addEventListener('click', () => {
+            switchTab(tabMembershipBtn, tabMembershipContent);
+            loadPlansToEditorForm();
+        });
+    }
     if (tabContentBtn) {
         tabContentBtn.addEventListener('click', () => {
             switchTab(tabContentBtn, tabContentContent);
             loadContentToEditorForm();
         });
     }
-
+ 
     // --- Load Admin Dashboard Data ---
     function loadAdminDashboard() {
         switchTab(tabBookingsBtn, tabBookingsContent);
         renderBookingsTab();
         renderGalleryManagerTab();
+        renderTestimonialsManagerTab();
+        loadPlansToEditorForm();
     }
 
     // --- Tab 1: Bookings Management ---
@@ -1033,20 +1148,268 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Tab 3: Content Editor Management ---
+    // --- Dynamic Testimonials Engine ---
+    function getTestimonials() {
+        return siteContent.testimonials || [];
+    }
+
+    function renderTestimonials() {
+        const grid = document.getElementById('dynamic-testimonials-grid');
+        if (!grid) return;
+        
+        const testimonials = getTestimonials();
+        grid.innerHTML = '';
+        
+        testimonials.forEach(t => {
+            const article = document.createElement('article');
+            article.className = 'testimonial-card reveal visible';
+            
+            let starsHTML = '';
+            for (let i = 0; i < t.rating; i++) starsHTML += '⭐';
+            
+            article.innerHTML = `
+                <div class="testimonial-rating" aria-label="${t.rating} out of 5 stars">${starsHTML}</div>
+                <blockquote class="testimonial-quote">
+                    "${escapeHTML(t.quote)}"
+                </blockquote>
+                <div class="testimonial-author">
+                    <span class="author-avatar" aria-hidden="true">${escapeHTML(t.avatar)}</span>
+                    <div>
+                        <h4 class="author-name">${escapeHTML(t.authorName)}</h4>
+                        <p class="author-title">${escapeHTML(t.authorTitle)}</p>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(article);
+        });
+    }
+
+    // Testimonials Tab Logic
+    const addTestimonialForm = document.getElementById('admin-add-testimonial-form');
+    const testimonialsManagerList = document.getElementById('testimonials-manager-list');
+    
+    function renderTestimonialsManagerTab() {
+        if (!testimonialsManagerList) return;
+        const testimonials = getTestimonials();
+        testimonialsManagerList.innerHTML = '';
+        
+        if (testimonials.length === 0) {
+            testimonialsManagerList.innerHTML = '<div style="color: var(--color-text-muted); font-size: 0.85rem; padding: 1rem 0;">NO TESTIMONIALS ADDED</div>';
+            return;
+        }
+        
+        testimonials.forEach((t, index) => {
+            const div = document.createElement('div');
+            div.className = 'testimonial-manager-card';
+            div.style.border = '1px solid var(--color-border-dim)';
+            div.style.padding = '1rem';
+            div.style.display = 'flex';
+            div.style.justifyContent = 'space-between';
+            div.style.alignItems = 'center';
+            div.style.background = 'var(--color-bg-pure)';
+            div.style.marginBottom = '0.5rem';
+            
+            div.innerHTML = `
+                <div style="flex-grow: 1; padding-right: 1rem;">
+                    <strong style="font-size: 0.85rem; color: white;">${escapeHTML(t.authorName)} (${escapeHTML(t.authorTitle)})</strong>
+                    <p style="font-size: 0.75rem; color: var(--color-text-gray); margin-top: 0.2rem; line-height: 1.4;">${escapeHTML(t.quote)}</p>
+                </div>
+                <button class="btn btn-secondary btn-small testimonial-delete-btn" data-index="${index}" style="padding: 0.4rem 0.8rem; font-size: 0.65rem;">DELETE</button>
+            `;
+            testimonialsManagerList.appendChild(div);
+        });
+        
+        const delButtons = testimonialsManagerList.querySelectorAll('.testimonial-delete-btn');
+        delButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const index = parseInt(e.target.getAttribute('data-index'), 10);
+                deleteTestimonial(index);
+            });
+        });
+    }
+    
+    function deleteTestimonial(index) {
+        if (!siteContent.testimonials) siteContent.testimonials = [];
+        siteContent.testimonials.splice(index, 1);
+        saveContentToServer().then(() => {
+            renderTestimonialsManagerTab();
+            renderTestimonials();
+        });
+    }
+    
+    if (addTestimonialForm) {
+        addTestimonialForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const quote = document.getElementById('test-quote').value.trim();
+            const authorName = document.getElementById('test-author').value.trim();
+            const authorTitle = document.getElementById('test-title').value.trim();
+            const avatar = document.getElementById('test-avatar').value.trim().toUpperCase();
+            const rating = parseInt(document.getElementById('test-rating').value, 10);
+            
+            if (quote && authorName && authorTitle && avatar) {
+                if (!siteContent.testimonials) siteContent.testimonials = [];
+                siteContent.testimonials.push({
+                    id: Date.now().toString(),
+                    rating,
+                    quote,
+                    authorName,
+                    authorTitle,
+                    avatar
+                });
+                
+                saveContentToServer().then(() => {
+                    addTestimonialForm.reset();
+                    renderTestimonialsManagerTab();
+                    renderTestimonials();
+                });
+            }
+        });
+    }
+
+    // --- Dynamic Pricing Engine ---
+    function getMembershipPlans() {
+        return siteContent.membershipPlans || [];
+    }
+    
+    function renderPricingPlans() {
+        const grid = document.getElementById('dynamic-pricing-grid');
+        if (!grid) return;
+        
+        const plans = getMembershipPlans();
+        grid.innerHTML = '';
+        
+        plans.forEach(plan => {
+            const card = document.createElement('div');
+            const isPopular = plan.badge && (plan.badge.toUpperCase() === 'POPULAR' || plan.badge.toUpperCase() === 'RECOMMENDED' || plan.badge.toUpperCase() === 'ULTIMATE');
+            card.className = `pricing-card ${isPopular ? 'popular-card' : ''}`;
+            
+            let badgeHTML = plan.badge ? `<div class="pricing-badge">${escapeHTML(plan.badge)}</div>` : '';
+            
+            let featuresHTML = '';
+            if (plan.features && Array.isArray(plan.features)) {
+                plan.features.forEach(f => {
+                    featuresHTML += `<li>${escapeHTML(f)}</li>`;
+                });
+            }
+            
+            card.innerHTML = `
+                ${badgeHTML}
+                <div>
+                    <h3 class="pricing-plan-name">${escapeHTML(plan.name)}</h3>
+                    <div class="pricing-price-container">
+                        <span class="pricing-price">${escapeHTML(plan.price)}</span>
+                        <span class="pricing-period">/ ${escapeHTML(plan.period)}</span>
+                    </div>
+                    <ul class="pricing-features-list">
+                        ${featuresHTML}
+                    </ul>
+                </div>
+                <a href="index.html#contact" class="btn ${isPopular ? 'btn-primary' : 'btn-secondary'}">${escapeHTML(plan.ctaText || 'GET STARTED')}</a>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    // Membership Plans Editor Tab
+    const membershipPlansForm = document.getElementById('admin-membership-form');
+    
+    function loadPlansToEditorForm() {
+        const plans = getMembershipPlans();
+        if (plans.length < 3) return;
+        
+        for (let i = 1; i <= 3; i++) {
+            const plan = plans[i - 1];
+            if (!plan) continue;
+            
+            const nameInput = document.getElementById(`edit-plan${i}-name`);
+            const priceInput = document.getElementById(`edit-plan${i}-price`);
+            const periodInput = document.getElementById(`edit-plan${i}-period`);
+            const featuresInput = document.getElementById(`edit-plan${i}-features`);
+            const ctaInput = document.getElementById(`edit-plan${i}-cta`);
+            const badgeInput = document.getElementById(`edit-plan${i}-badge`);
+            
+            if (nameInput) nameInput.value = plan.name || '';
+            if (priceInput) priceInput.value = plan.price || '';
+            if (periodInput) periodInput.value = plan.period || '';
+            if (featuresInput) featuresInput.value = plan.features ? plan.features.join('\n') : '';
+            if (ctaInput) ctaInput.value = plan.ctaText || '';
+            if (badgeInput) badgeInput.value = plan.badge || '';
+        }
+    }
+    
+    if (membershipPlansForm) {
+        membershipPlansForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            if (!siteContent.membershipPlans) siteContent.membershipPlans = [];
+            
+            for (let i = 1; i <= 3; i++) {
+                const name = document.getElementById(`edit-plan${i}-name`).value.trim();
+                const price = document.getElementById(`edit-plan${i}-price`).value.trim();
+                const period = document.getElementById(`edit-plan${i}-period`).value.trim();
+                const features = document.getElementById(`edit-plan${i}-features`).value.trim().split('\n').filter(f => f.trim() !== '');
+                const ctaText = document.getElementById(`edit-plan${i}-cta`).value.trim();
+                const badge = document.getElementById(`edit-plan${i}-badge`).value.trim();
+                
+                siteContent.membershipPlans[i - 1] = {
+                    id: i.toString(),
+                    name,
+                    price,
+                    period,
+                    features,
+                    ctaText,
+                    badge
+                };
+            }
+            
+            saveContentToServer().then(() => {
+                alert('Membership plans successfully updated and saved to server!');
+                renderPricingPlans();
+            });
+        });
+    }
+
+    // --- Tab 5: Content Editor Management ---
+    const aboutPhotoSourceRadios = document.getElementsByName('about-photo-source');
+    const aboutPhotoFileGroup = document.getElementById('about-photo-file-group');
+    const aboutPhotoUrlGroup = document.getElementById('about-photo-url-group');
+    
+    if (aboutPhotoSourceRadios) {
+        aboutPhotoSourceRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.value === 'file') {
+                    if (aboutPhotoFileGroup) aboutPhotoFileGroup.style.display = 'block';
+                    if (aboutPhotoUrlGroup) aboutPhotoUrlGroup.style.display = 'none';
+                    const editUrl = document.getElementById('edit-aboutPhotoUrl');
+                    if (editUrl) editUrl.required = false;
+                } else {
+                    if (aboutPhotoFileGroup) aboutPhotoFileGroup.style.display = 'none';
+                    if (aboutPhotoUrlGroup) aboutPhotoUrlGroup.style.display = 'block';
+                    const editUrl = document.getElementById('edit-aboutPhotoUrl');
+                    if (editUrl) editUrl.required = true;
+                }
+            });
+        });
+    }
+
     function loadContentToEditorForm() {
         const keys = [
             'heroTitle1', 'heroSubtitle1',
             'heroTitle2', 'heroSubtitle2',
             'heroTitle3', 'heroSubtitle3',
-            'aboutSubtitle', 'aboutStory1', 'aboutStory2'
+            'aboutHeading', 'aboutSubtitle', 'aboutStory1', 'aboutStory2'
         ];
         keys.forEach(key => {
             const input = document.getElementById(`edit-${key}`);
-            if (input && siteContent[key]) {
+            if (input && siteContent[key] !== undefined) {
                 input.value = siteContent[key];
             }
         });
+        
+        const urlInput = document.getElementById('edit-aboutPhotoUrl');
+        if (urlInput && siteContent.aboutPhoto) {
+            urlInput.value = siteContent.aboutPhoto.startsWith('data:') ? '' : siteContent.aboutPhoto;
+        }
     }
 
     if (contentForm) {
@@ -1057,7 +1420,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'heroTitle1', 'heroSubtitle1',
                 'heroTitle2', 'heroSubtitle2',
                 'heroTitle3', 'heroSubtitle3',
-                'aboutSubtitle', 'aboutStory1', 'aboutStory2'
+                'aboutHeading', 'aboutSubtitle', 'aboutStory1', 'aboutStory2'
             ];
             
             keys.forEach(key => {
@@ -1067,11 +1430,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             
-            saveContentToServer().then(() => {
-                alert('Website content successfully updated and saved to server!');
-                applyContentToDOM();
-            });
+            const saveAndRender = () => {
+                saveContentToServer().then(() => {
+                    alert('Website content successfully updated and saved to server!');
+                    applyContentToDOM();
+                });
+            };
+            
+            const checkedSource = document.querySelector('input[name="about-photo-source"]:checked');
+            const photoSource = checkedSource ? checkedSource.value : 'file';
+            
+            if (photoSource === 'url') {
+                const urlInput = document.getElementById('edit-aboutPhotoUrl');
+                const url = urlInput ? urlInput.value.trim() : '';
+                if (url) {
+                    siteContent.aboutPhoto = url;
+                }
+                saveAndRender();
+            } else {
+                const fileInput = document.getElementById('edit-aboutPhotoFile');
+                if (fileInput && fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        siteContent.aboutPhoto = event.target.result;
+                        saveAndRender();
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    saveAndRender();
+                }
+            }
         });
+    }
+
+    // Check if query parameter requests admin view
+    if (window.location.search.includes('admin=true')) {
+        if (adminOverlay) {
+            adminOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            initAdminOverlayView();
+        }
     }
 
     // Simple HTML escaping helper for security
@@ -1086,6 +1485,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 '"': '&quot;'
             }[tag] || tag)
         );
+    }
+
+    // Check if on membership page during init to trigger initial render
+    if (document.getElementById('dynamic-pricing-grid')) {
+        renderPricingPlans();
     }
 
 });
