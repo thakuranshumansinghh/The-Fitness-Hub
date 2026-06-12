@@ -747,10 +747,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const createUserPassword = document.getElementById('create-user-password');
 
     // Initialize admin users in localStorage if not exist
-    if (!localStorage.getItem('adminUsers')) {
-        const defaultUsers = [{ username: "admin username", password: "password" }];
+    let currentUsers = localStorage.getItem('adminUsers');
+    if (!currentUsers) {
+        const defaultUsers = [{ username: "The Fitness HUB", password: "thefitnesshub@25" }];
         localStorage.setItem('adminUsers', JSON.stringify(defaultUsers));
         localStorage.setItem('adminRegistered', 'true');
+    } else {
+        try {
+            let usersList = JSON.parse(currentUsers);
+            let updated = false;
+            usersList = usersList.map(u => {
+                if (u.username === "admin username" && u.password === "password") {
+                    updated = true;
+                    return { username: "The Fitness HUB", password: "thefitnesshub@25" };
+                }
+                return u;
+            });
+            if (updated) {
+                localStorage.setItem('adminUsers', JSON.stringify(usersList));
+            }
+        } catch(e) {}
     }
 
     // Tab buttons and containers
@@ -786,8 +802,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const photoUrlGroup = document.getElementById('photo-url-group');
 
     // Target Admin Info
-    const TARGET_ADMIN_ID = "admin username";
-    const TARGET_ADMIN_PW = "password";
+    const TARGET_ADMIN_ID = "The Fitness HUB";
+    const TARGET_ADMIN_PW = "thefitnesshub@25";
 
     // Toggle overlay visibility
     if (adminTrigger && adminOverlay) {
@@ -1801,7 +1817,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!adminUsersList) return;
         adminUsersList.innerHTML = '';
         
-        const users = JSON.parse(localStorage.getItem('adminUsers')) || [{ username: "admin username", password: "password" }];
+        const users = JSON.parse(localStorage.getItem('adminUsers')) || [{ username: "The Fitness HUB", password: "thefitnesshub@25" }];
         
         if (users.length === 0) {
             adminUsersList.innerHTML = '<div style="color: var(--color-text-gray); font-size: 0.85rem; padding: 1rem; text-align: center;">NO ADMIN USERS CONFIGURED</div>';
