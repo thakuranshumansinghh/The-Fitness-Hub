@@ -745,6 +745,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const adminCreateUserForm = document.getElementById('admin-create-user-form');
     const createUserUsername = document.getElementById('create-user-username');
     const createUserPassword = document.getElementById('create-user-password');
+    const adminEditUserForm = document.getElementById('admin-edit-user-form');
+    const editUserId = document.getElementById('edit-user-id');
+    const editUserUsername = document.getElementById('edit-user-username');
+    const editUserPassword = document.getElementById('edit-user-password');
+    const adminCancelEditBtn = document.getElementById('admin-cancel-edit-btn');
 
     // Initialize admin users in localStorage if not exist
     let currentUsers = localStorage.getItem('adminUsers');
@@ -1841,7 +1846,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button class="user-password-reveal-btn" data-index="${index}" style="background: none; border: none; color: var(--color-text-gray); cursor: pointer; padding: 2px;"><i class="${eyeIconClass}"></i></button>
                     </div>
                 </div>
-                <div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-secondary btn-small user-edit-btn" data-index="${index}" style="padding: 0.4rem 0.8rem; font-size: 0.7rem; border-color: var(--color-text-gray); color: var(--color-text-white);">EDIT</button>
                     <button class="btn btn-secondary btn-small user-delete-btn" data-index="${index}" style="padding: 0.4rem 0.8rem; font-size: 0.7rem; border-color: #ff3333; color: #ff3333; display: ${user.username === currentLoggedInUser ? 'none' : 'block'};">DELETE</button>
                 </div>
             `;
@@ -1854,6 +1860,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 const index = btn.getAttribute('data-index');
                 revealedUserPasswords[index] = !revealedUserPasswords[index];
                 renderUsersTab();
+            });
+        });
+
+        adminUsersList.querySelectorAll('.user-edit-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const index = btn.getAttribute('data-index');
+                const users = JSON.parse(localStorage.getItem('adminUsers')) || [];
+                const user = users[index];
+                
+                if (adminCreateUserForm) adminCreateUserForm.style.display = 'none';
+                if (adminAddUserBtn) adminAddUserBtn.textContent = 'ADD USER';
+                
+                if (adminEditUserForm) {
+                    adminEditUserForm.style.display = 'block';
+                    editUserId.value = index;
+                    editUserUsername.value = user.username;
+                    editUserPassword.value = user.password;
+                    editUserPassword.setAttribute('type', 'password');
+                    const eyeIcon = adminEditUserForm.querySelector('.eye-toggle-btn i');
+                    if (eyeIcon) eyeIcon.className = "fa-solid fa-eye-slash";
+                }
             });
         });
 
@@ -1876,9 +1904,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (adminAddUserBtn && adminCreateUserForm) {
         adminAddUserBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            if (adminEditUserForm) adminEditUserForm.style.display = 'none';
             const isHidden = adminCreateUserForm.style.display === 'none';
             adminCreateUserForm.style.display = isHidden ? 'block' : 'none';
             adminAddUserBtn.textContent = isHidden ? 'CANCEL' : 'ADD USER';
+        });
+    }
+
+    if (adminCancelEditBtn && adminEditUserForm) {
+        adminCancelEditBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            adminEditUserForm.style.display = 'none';
+            adminEditUserForm.reset();
         });
     }
 
@@ -1901,6 +1938,37 @@ document.addEventListener('DOMContentLoaded', () => {
             adminCreateUserForm.style.display = 'none';
             adminAddUserBtn.textContent = 'ADD USER';
             renderUsersTab();
+        });
+    }
+
+    if (adminEditUserForm) {
+        adminEditUserForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const index = parseInt(editUserId.value);
+            const newUsername = editUserUsername.value.trim();
+            const newPassword = editUserPassword.value.trim();
+            const users = JSON.parse(localStorage.getItem('adminUsers')) || [];
+
+            if (users[index].username.toLowerCase() !== newUsername.toLowerCase() && 
+                users.some(u => u.username.toLowerCase() === newUsername.toLowerCase())) {
+                alert(`Error: A user account with name "${newUsername}" already exists.`);
+                return;
+            }
+
+            const oldUsername = users[index].username;
+            users[index].username = newUsername;
+            users[index].password = newPassword;
+            localStorage.setItem('adminUsers', JSON.stringify(users));
+
+            const currentLoggedInUser = sessionStorage.getItem('adminUsername');
+            if (oldUsername === currentLoggedInUser) {
+                sessionStorage.setItem('adminUsername', newUsername);
+            }
+
+            adminEditUserForm.reset();
+            adminEditUserForm.style.display = 'none';
+            renderUsersTab();
+            alert('Admin credentials successfully updated!');
         });
     }
 
