@@ -737,6 +737,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const setupError = document.getElementById('setup-error');
     const loginError = document.getElementById('login-error');
 
+    // Users Management cache elements
+    const tabUsersBtn = document.getElementById('tab-users-btn');
+    const tabUsersContent = document.getElementById('tab-users-content');
+    const adminUsersList = document.getElementById('admin-users-list');
+    const adminAddUserBtn = document.getElementById('admin-add-user-btn');
+    const adminCreateUserForm = document.getElementById('admin-create-user-form');
+    const createUserUsername = document.getElementById('create-user-username');
+    const createUserPassword = document.getElementById('create-user-password');
+
+    // Initialize admin users in localStorage if not exist
+    if (!localStorage.getItem('adminUsers')) {
+        const defaultUsers = [{ username: "admin username", password: "password" }];
+        localStorage.setItem('adminUsers', JSON.stringify(defaultUsers));
+        localStorage.setItem('adminRegistered', 'true');
+    }
+
     // Tab buttons and containers
     const tabBookingsBtn = document.getElementById('tab-bookings-btn');
     const tabGalleryBtn = document.getElementById('tab-gallery-btn');
@@ -770,8 +786,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const photoUrlGroup = document.getElementById('photo-url-group');
 
     // Target Admin Info
-    const TARGET_ADMIN_ID = "The Fitness Hub";
-    const TARGET_ADMIN_PW = "thefitnesshub@25";
+    const TARGET_ADMIN_ID = "admin username";
+    const TARGET_ADMIN_PW = "password";
 
     // Toggle overlay visibility
     if (adminTrigger && adminOverlay) {
@@ -795,6 +811,28 @@ document.addEventListener('DOMContentLoaded', () => {
             adminOverlay.style.display = 'none';
             document.body.style.overflow = 'auto';
         }
+    });
+
+    // Setup password eye toggles
+    document.querySelectorAll('.eye-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const inputId = btn.getAttribute('data-input');
+            const input = document.getElementById(inputId);
+            if (input) {
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                
+                const icon = btn.querySelector('i');
+                if (icon) {
+                    if (type === 'text') {
+                        icon.className = 'fa-solid fa-eye';
+                    } else {
+                        icon.className = 'fa-solid fa-eye-slash';
+                    }
+                }
+            }
+        });
     });
 
     function initAdminOverlayView() {
@@ -825,14 +863,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const passVal = document.getElementById('setup-password').value.trim();
 
             if (userVal === TARGET_ADMIN_ID && passVal === TARGET_ADMIN_PW) {
+                const users = JSON.parse(localStorage.getItem('adminUsers')) || [];
+                if (!users.some(u => u.username === userVal)) {
+                    users.push({ username: userVal, password: passVal });
+                }
+                localStorage.setItem('adminUsers', JSON.stringify(users));
                 localStorage.setItem('adminRegistered', 'true');
-                localStorage.setItem('adminCredentials', JSON.stringify({ username: userVal, password: passVal }));
                 
                 sessionStorage.setItem('adminLoggedIn', 'true');
+                sessionStorage.setItem('adminUsername', userVal);
                 setupForm.reset();
                 initAdminOverlayView();
             } else {
-                setupError.textContent = `Only ID "${TARGET_ADMIN_ID}" and password "${TARGET_ADMIN_PW}" are allowed for the single admin slot.`;
+                setupError.textContent = `Access Denied: Only the designated admin ID and password are permitted.`;
                 setupError.style.display = 'block';
             }
         });
@@ -846,10 +889,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const userVal = document.getElementById('login-username').value.trim();
             const passVal = document.getElementById('login-password').value.trim();
-            const storedCreds = JSON.parse(localStorage.getItem('adminCredentials'));
+            const users = JSON.parse(localStorage.getItem('adminUsers')) || [];
 
-            if (storedCreds && userVal === storedCreds.username && passVal === storedCreds.password) {
+            const user = users.find(u => u.username === userVal && u.password === passVal);
+
+            if (user) {
                 sessionStorage.setItem('adminLoggedIn', 'true');
+                sessionStorage.setItem('adminUsername', user.username);
                 loginForm.reset();
                 initAdminOverlayView();
             } else {
@@ -863,13 +909,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
             sessionStorage.removeItem('adminLoggedIn');
+            sessionStorage.removeItem('adminUsername');
             initAdminOverlayView();
         });
     }
 
     // --- Dashboard Tabs Navigation ---
-    const allTabButtons = [tabBookingsBtn, tabGalleryBtn, tabTestimonialsBtn, tabMembershipBtn, tabServicesBtn, tabContentBtn];
-    const allTabContents = [tabBookingsContent, tabGalleryContent, tabTestimonialsContent, tabMembershipContent, tabServicesContent, tabContentContent];
+    const allTabButtons = [tabBookingsBtn, tabGalleryBtn, tabTestimonialsBtn, tabMembershipBtn, tabServicesBtn, tabContentBtn, tabUsersBtn];
+    const allTabContents = [tabBookingsContent, tabGalleryContent, tabTestimonialsContent, tabMembershipContent, tabServicesContent, tabContentContent, tabUsersContent];
     
     function switchTab(activeBtn, activeContent) {
         allTabButtons.forEach(btn => {
@@ -928,6 +975,12 @@ document.addEventListener('DOMContentLoaded', () => {
             loadContentToEditorForm();
         });
     }
+    if (tabUsersBtn) {
+        tabUsersBtn.addEventListener('click', () => {
+            switchTab(tabUsersBtn, tabUsersContent);
+            renderUsersTab();
+        });
+    }
  
     // --- Load Admin Dashboard Data ---
     function loadAdminDashboard() {
@@ -937,6 +990,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderTestimonialsManagerTab();
         loadPlansToEditorForm();
         loadServicesToEditorForm();
+        renderUsersTab();
     }
 
     // --- Tab 1: Bookings Management ---
@@ -1738,6 +1792,100 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check if on membership page during init to trigger initial render
     if (document.getElementById('dynamic-pricing-grid')) {
         renderPricingPlans();
+    }
+
+    // --- Tab 6: Admin Users Management ---
+    let revealedUserPasswords = {};
+
+    function renderUsersTab() {
+        if (!adminUsersList) return;
+        adminUsersList.innerHTML = '';
+        
+        const users = JSON.parse(localStorage.getItem('adminUsers')) || [{ username: "admin username", password: "password" }];
+        
+        if (users.length === 0) {
+            adminUsersList.innerHTML = '<div style="color: var(--color-text-gray); font-size: 0.85rem; padding: 1rem; text-align: center;">NO ADMIN USERS CONFIGURED</div>';
+            return;
+        }
+
+        users.forEach((user, index) => {
+            const isRevealed = revealedUserPasswords[index] === true;
+            const passwordDisplay = isRevealed ? user.password : "••••••••";
+            const eyeIconClass = isRevealed ? "fa-solid fa-eye" : "fa-solid fa-eye-slash";
+            const currentLoggedInUser = sessionStorage.getItem('adminUsername');
+
+            const item = document.createElement('div');
+            item.className = 'user-item';
+            item.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border-dim);';
+            item.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <span style="font-family: var(--font-heading); font-size: 0.9rem; color: var(--color-text-white);">${escapeHTML(user.username)} ${user.username === currentLoggedInUser ? '<span style="font-size: 0.65rem; color: var(--color-accent); border: 1px solid var(--color-accent); padding: 1px 4px; margin-left: 5px;">YOU</span>' : ''}</span>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; font-family: monospace; font-size: 0.85rem; color: var(--color-text-gray);">
+                        <span>Password: ${escapeHTML(passwordDisplay)}</span>
+                        <button class="user-password-reveal-btn" data-index="${index}" style="background: none; border: none; color: var(--color-text-gray); cursor: pointer; padding: 2px;"><i class="${eyeIconClass}"></i></button>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-secondary btn-small user-delete-btn" data-index="${index}" style="padding: 0.4rem 0.8rem; font-size: 0.7rem; border-color: #ff3333; color: #ff3333; display: ${user.username === currentLoggedInUser ? 'none' : 'block'};">DELETE</button>
+                </div>
+            `;
+            adminUsersList.appendChild(item);
+        });
+
+        adminUsersList.querySelectorAll('.user-password-reveal-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const index = btn.getAttribute('data-index');
+                revealedUserPasswords[index] = !revealedUserPasswords[index];
+                renderUsersTab();
+            });
+        });
+
+        adminUsersList.querySelectorAll('.user-delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const index = parseInt(btn.getAttribute('data-index'));
+                const users = JSON.parse(localStorage.getItem('adminUsers')) || [];
+                const targetUser = users[index];
+
+                if (confirm(`Are you sure you want to permanently delete admin user "${targetUser.username}"?`)) {
+                    users.splice(index, 1);
+                    localStorage.setItem('adminUsers', JSON.stringify(users));
+                    renderUsersTab();
+                }
+            });
+        });
+    }
+
+    if (adminAddUserBtn && adminCreateUserForm) {
+        adminAddUserBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const isHidden = adminCreateUserForm.style.display === 'none';
+            adminCreateUserForm.style.display = isHidden ? 'block' : 'none';
+            adminAddUserBtn.textContent = isHidden ? 'CANCEL' : 'ADD USER';
+        });
+    }
+
+    if (adminCreateUserForm) {
+        adminCreateUserForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = createUserUsername.value.trim();
+            const password = createUserPassword.value.trim();
+            const users = JSON.parse(localStorage.getItem('adminUsers')) || [];
+
+            if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+                alert(`Error: A user account with name "${username}" already exists.`);
+                return;
+            }
+
+            users.push({ username, password });
+            localStorage.setItem('adminUsers', JSON.stringify(users));
+            
+            adminCreateUserForm.reset();
+            adminCreateUserForm.style.display = 'none';
+            adminAddUserBtn.textContent = 'ADD USER';
+            renderUsersTab();
+        });
     }
 
 });
