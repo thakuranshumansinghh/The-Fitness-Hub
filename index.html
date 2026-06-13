@@ -28,6 +28,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syncopate:wght@700&display=swap" rel="stylesheet">
     
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
     
@@ -457,12 +460,12 @@
                 <form id="admin-setup-form" class="admin-form">
                     <div class="form-group">
                         <label for="setup-username">ADMIN ID</label>
-                        <input type="text" id="setup-username" placeholder="The Fitness HUB" value="The Fitness HUB" required>
+                        <input type="text" id="setup-username" placeholder="Enter Admin ID" required>
                     </div>
                     <div class="form-group">
                         <label for="setup-password">PASSWORD</label>
                         <div style="position: relative; width: 100%;">
-                            <input type="password" id="setup-password" placeholder="thefitnesshub@25" value="thefitnesshub@25" required style="width: 100%; padding-right: 2.5rem;">
+                            <input type="password" id="setup-password" placeholder="Enter Password" required style="width: 100%; padding-right: 2.5rem;">
                             <button type="button" class="eye-toggle-btn" data-input="setup-password" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--color-text-gray); cursor: pointer;"><i class="fa-solid fa-eye-slash"></i></button>
                         </div>
                     </div>
@@ -478,12 +481,12 @@
                 <form id="admin-login-form" class="admin-form">
                     <div class="form-group">
                         <label for="login-username">ADMIN ID</label>
-                        <input type="text" id="login-username" placeholder="The Fitness HUB" value="The Fitness HUB" required>
+                        <input type="text" id="login-username" placeholder="Enter Admin ID" required>
                     </div>
                     <div class="form-group">
                         <label for="login-password">PASSWORD</label>
                         <div style="position: relative; width: 100%;">
-                            <input type="password" id="login-password" placeholder="thefitnesshub@25" value="thefitnesshub@25" required style="width: 100%; padding-right: 2.5rem;">
+                            <input type="password" id="login-password" placeholder="Enter Password" required style="width: 100%; padding-right: 2.5rem;">
                             <button type="button" class="eye-toggle-btn" data-input="login-password" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--color-text-gray); cursor: pointer;"><i class="fa-solid fa-eye-slash"></i></button>
                         </div>
                     </div>
@@ -508,6 +511,7 @@
                     <button class="tab-btn" id="tab-services-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">SERVICES</button>
                     <button class="tab-btn" id="tab-content-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">PAGE TEXTS</button>
                     <button class="tab-btn" id="tab-users-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">USERS</button>
+                    <button class="tab-btn" id="tab-security-btn" style="background: none; border: none; color: var(--color-text-gray); font-family: var(--font-heading); font-size: 0.8rem; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">CHANGE CREDENTIALS</button>
                 </div>
                 
                 <!-- Tab 1: Bookings Content -->
@@ -928,6 +932,25 @@
                             <!-- Dynamically Loaded Users -->
                         </div>
                     </div>
+                </div>
+
+                <!-- Tab 7: Change Credentials Content -->
+                <div class="tab-content" id="tab-security-content" style="display: none;">
+                    <form id="admin-security-form" class="admin-form" style="border: 1px solid var(--color-border-dim); padding: 1.5rem; background: var(--color-bg-pure);">
+                        <h3 style="font-size: 1rem; margin-bottom: 1rem; letter-spacing: 0.05em;">CHANGE ADMIN LOGIN</h3>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="security-username">NEW ADMIN ID / USERNAME *</label>
+                            <input type="text" id="security-username" placeholder="Enter New Admin ID" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label for="security-password">NEW PASSWORD *</label>
+                            <div style="position: relative; width: 100%;">
+                                <input type="password" id="security-password" placeholder="Enter New Password" required style="width: 100%; padding-right: 2.5rem; background: var(--color-bg-primary); border: 1px solid var(--color-border-dim); color: white;">
+                                <button type="button" class="eye-toggle-btn" data-input="security-password" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--color-text-gray); cursor: pointer;"><i class="fa-solid fa-eye-slash"></i></button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.75rem; width: auto;">UPDATE ADMIN CREDENTIALS</button>
+                    </form>
                 </div>
             </div>
         </div>

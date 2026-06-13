@@ -751,6 +751,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const editUserPassword = document.getElementById('edit-user-password');
     const adminCancelEditBtn = document.getElementById('admin-cancel-edit-btn');
 
+    // Security Settings tab cache elements
+    const tabSecurityBtn = document.getElementById('tab-security-btn');
+    const tabSecurityContent = document.getElementById('tab-security-content');
+    const securityForm = document.getElementById('admin-security-form');
+    const securityUsername = document.getElementById('security-username');
+    const securityPassword = document.getElementById('security-password');
+
     // Initialize admin users in localStorage if not exist
     let currentUsers = localStorage.getItem('adminUsers');
     if (!currentUsers) {
@@ -771,6 +778,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (updated) {
                 localStorage.setItem('adminUsers', JSON.stringify(usersList));
             }
+            localStorage.setItem('adminRegistered', 'true');
         } catch(e) {}
     }
 
@@ -936,8 +944,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Dashboard Tabs Navigation ---
-    const allTabButtons = [tabBookingsBtn, tabGalleryBtn, tabTestimonialsBtn, tabMembershipBtn, tabServicesBtn, tabContentBtn, tabUsersBtn];
-    const allTabContents = [tabBookingsContent, tabGalleryContent, tabTestimonialsContent, tabMembershipContent, tabServicesContent, tabContentContent, tabUsersContent];
+    const allTabButtons = [tabBookingsBtn, tabGalleryBtn, tabTestimonialsBtn, tabMembershipBtn, tabServicesBtn, tabContentBtn, tabUsersBtn, tabSecurityBtn];
+    const allTabContents = [tabBookingsContent, tabGalleryContent, tabTestimonialsContent, tabMembershipContent, tabServicesContent, tabContentContent, tabUsersContent, tabSecurityContent];
     
     function switchTab(activeBtn, activeContent) {
         allTabButtons.forEach(btn => {
@@ -1002,16 +1010,17 @@ document.addEventListener('DOMContentLoaded', () => {
             renderUsersTab();
         });
     }
+    if (tabSecurityBtn) {
+        tabSecurityBtn.addEventListener('click', () => {
+            switchTab(tabSecurityBtn, tabSecurityContent);
+            loadCurrentCredentialsToSecurityForm();
+        });
+    }
  
     // --- Load Admin Dashboard Data ---
     function loadAdminDashboard() {
         switchTab(tabBookingsBtn, tabBookingsContent);
         renderBookingsTab();
-        renderGalleryManagerTab();
-        renderTestimonialsManagerTab();
-        loadPlansToEditorForm();
-        loadServicesToEditorForm();
-        renderUsersTab();
     }
 
     // --- Tab 1: Bookings Management ---
@@ -1816,8 +1825,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Tab 6: Admin Users Management ---
-    let revealedUserPasswords = {};
-
     function renderUsersTab() {
         if (!adminUsersList) return;
         adminUsersList.innerHTML = '';
@@ -1830,9 +1837,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         users.forEach((user, index) => {
-            const isRevealed = revealedUserPasswords[index] === true;
-            const passwordDisplay = isRevealed ? user.password : "••••••••";
-            const eyeIconClass = isRevealed ? "fa-solid fa-eye" : "fa-solid fa-eye-slash";
             const currentLoggedInUser = sessionStorage.getItem('adminUsername');
 
             const item = document.createElement('div');
@@ -1842,8 +1846,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                     <span style="font-family: var(--font-heading); font-size: 0.9rem; color: var(--color-text-white);">${escapeHTML(user.username)} ${user.username === currentLoggedInUser ? '<span style="font-size: 0.65rem; color: var(--color-accent); border: 1px solid var(--color-accent); padding: 1px 4px; margin-left: 5px;">YOU</span>' : ''}</span>
                     <div style="display: flex; align-items: center; gap: 0.5rem; font-family: monospace; font-size: 0.85rem; color: var(--color-text-gray);">
-                        <span>Password: ${escapeHTML(passwordDisplay)}</span>
-                        <button class="user-password-reveal-btn" data-index="${index}" style="background: none; border: none; color: var(--color-text-gray); cursor: pointer; padding: 2px;"><i class="${eyeIconClass}"></i></button>
+                        <span>Password: ••••••••</span>
                     </div>
                 </div>
                 <div style="display: flex; gap: 0.5rem;">
@@ -1852,15 +1855,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             adminUsersList.appendChild(item);
-        });
-
-        adminUsersList.querySelectorAll('.user-password-reveal-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const index = btn.getAttribute('data-index');
-                revealedUserPasswords[index] = !revealedUserPasswords[index];
-                renderUsersTab();
-            });
         });
 
         adminUsersList.querySelectorAll('.user-edit-btn').forEach(btn => {
@@ -1877,7 +1871,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     adminEditUserForm.style.display = 'block';
                     editUserId.value = index;
                     editUserUsername.value = user.username;
-                    editUserPassword.value = user.password;
+                    editUserPassword.value = ""; // Masked/empty for security
                     editUserPassword.setAttribute('type', 'password');
                     const eyeIcon = adminEditUserForm.querySelector('.eye-toggle-btn i');
                     if (eyeIcon) eyeIcon.className = "fa-solid fa-eye-slash";
@@ -1969,6 +1963,57 @@ document.addEventListener('DOMContentLoaded', () => {
             adminEditUserForm.style.display = 'none';
             renderUsersTab();
             alert('Admin credentials successfully updated!');
+        });
+    }
+
+    // --- Tab 7: Change Credentials Operations ---
+    function loadCurrentCredentialsToSecurityForm() {
+        const currentLoggedInUser = sessionStorage.getItem('adminUsername');
+        if (securityUsername) {
+            securityUsername.value = currentLoggedInUser || '';
+        }
+        if (securityPassword) {
+            securityPassword.value = '';
+            securityPassword.setAttribute('type', 'password');
+            const eyeIcon = securityForm.querySelector('.eye-toggle-btn i');
+            if (eyeIcon) eyeIcon.className = "fa-solid fa-eye-slash";
+        }
+    }
+
+    if (securityForm) {
+        securityForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const currentLoggedInUser = sessionStorage.getItem('adminUsername');
+            const newUsername = securityUsername.value.trim();
+            const newPassword = securityPassword.value.trim();
+
+            if (!newUsername || !newPassword) {
+                alert('Username and Password cannot be empty.');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('adminUsers')) || [];
+            const index = users.findIndex(u => u.username.toLowerCase() === currentLoggedInUser.toLowerCase());
+
+            if (index !== -1) {
+                const duplicateIndex = users.findIndex(u => u.username.toLowerCase() === newUsername.toLowerCase());
+                if (duplicateIndex !== -1 && duplicateIndex !== index) {
+                    alert(`Error: A user account with name "${newUsername}" already exists.`);
+                    return;
+                }
+
+                users[index].username = newUsername;
+                users[index].password = newPassword;
+                localStorage.setItem('adminUsers', JSON.stringify(users));
+                sessionStorage.setItem('adminUsername', newUsername);
+
+                alert('Admin credentials successfully updated!');
+                securityForm.reset();
+                loadCurrentCredentialsToSecurityForm();
+                renderUsersTab();
+            } else {
+                alert('Error: Current admin session user not found in the users list.');
+            }
         });
     }
 
