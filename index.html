@@ -12,24 +12,28 @@
     <meta property="og:url" content="http://localhost:8080/">
     <meta property="og:title" content="THE FITNESS HUB | Premium Gym in Kurla, Mumbai">
     <meta property="og:description" content="Forge your legacy at THE FITNESS HUB, Kurla, Mumbai's premier luxury gym. Offering advanced weight training, CrossFit, HIIT, and personal training.">
-    <meta property="og:image" content="http://localhost:8080/assets/hero_bg.png">
+    <meta property="og:image" content="http://localhost:8080/assets/hero-frames/ezgif-frame-001.jpg">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="http://localhost:8080/">
     <meta property="twitter:title" content="THE FITNESS HUB | Premium Gym in Kurla, Mumbai">
     <meta property="twitter:description" content="Forge your legacy at THE FITNESS HUB, Kurla, Mumbai's premier luxury gym.">
-    <meta property="twitter:image" content="http://localhost:8080/assets/hero_bg.png">
+    <meta property="twitter:image" content="http://localhost:8080/assets/hero-frames/ezgif-frame-001.jpg">
     
     <link rel="canonical" href="http://localhost:8080/">
+    
+    <!-- Preload Critical First Hero Frame -->
+    <link rel="preload" as="image" href="assets/hero-frames/ezgif-frame-001.jpg">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syncopate:wght@700&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Font Awesome Icons (Loaded Asynchronously) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
@@ -237,7 +241,7 @@
                 <div class="about-split-layout">
                     <!-- Left Side: Photo -->
                     <div class="about-photo-wrapper reveal">
-                        <img src="assets/about_img.jpg" alt="Elite head coach and training staff at THE FITNESS HUB in Kurla, Mumbai" class="about-photo" id="dyn-aboutPhoto">
+                        <img src="assets/about_img.jpg" alt="Elite head coach and training staff at THE FITNESS HUB in Kurla, Mumbai" class="about-photo" id="dyn-aboutPhoto" loading="lazy">
                     </div>
 
                     <!-- Right Side: Description and Coaches -->

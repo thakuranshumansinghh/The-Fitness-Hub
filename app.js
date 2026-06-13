@@ -69,7 +69,16 @@ document.addEventListener('DOMContentLoaded', () => {
             resizeCanvas();
             
             // Start background parallel loading of remaining frames shortly after page is visible
-            setTimeout(loadRemainingFrames, 100);
+            let framesStarted = false;
+            const startFrameLoading = () => {
+                if (framesStarted) return;
+                framesStarted = true;
+                setTimeout(loadRemainingFrames, 50);
+            };
+            
+            // Trigger background frame loading on first scroll or after a 1.5s delay
+            window.addEventListener('scroll', startFrameLoading, { passive: true, once: true });
+            setTimeout(startFrameLoading, 1500);
             
             // Start render loop
             isRendering = true;
@@ -81,7 +90,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // Fallback if first frame fails
         if (preloaderEl) preloaderEl.classList.add('fade-out');
         document.body.style.overflow = '';
-        setTimeout(loadRemainingFrames, 100);
+        
+        let framesStarted = false;
+        const startFrameLoading = () => {
+            if (framesStarted) return;
+            framesStarted = true;
+            setTimeout(loadRemainingFrames, 50);
+        };
+        window.addEventListener('scroll', startFrameLoading, { passive: true, once: true });
+        setTimeout(startFrameLoading, 1500);
+        
         requestAnimationFrame(renderLoop);
     };
 
@@ -169,25 +187,39 @@ document.addEventListener('DOMContentLoaded', () => {
             context.drawImage(img, drawX, drawY, drawWidth, drawHeight);
         }
         
+        let containerHeight = 0;
+        let viewportHeight = 0;
+        let scrollRange = 0;
+
+        function cacheHeroDimensions() {
+            if (scrollContainer) {
+                containerHeight = scrollContainer.offsetHeight;
+                viewportHeight = window.innerHeight;
+                scrollRange = containerHeight - viewportHeight;
+            }
+        }
+        
+        // Cache dimensions initially
+        cacheHeroDimensions();
+        
+        let resizeTimeout;
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            cacheHeroDimensions();
             drawFrame(Math.round(currentFrame));
         }
-        window.addEventListener('resize', resizeCanvas);
         
-        // Listen to scroll to update target frame and scenes
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(resizeCanvas, 100);
+        });
+        
+        // Listen to scroll to update target frame (passive listener for high performance)
         window.addEventListener('scroll', () => {
-            if (!scrollContainer) return;
+            if (scrollRange <= 0) return;
             
-            const rect = scrollContainer.getBoundingClientRect();
-            const containerHeight = scrollContainer.offsetHeight;
-            const viewportHeight = window.innerHeight;
-            
-            const scrollTop = -rect.top;
-            const scrollRange = containerHeight - viewportHeight;
-            
-            let fraction = scrollTop / scrollRange;
+            let fraction = window.scrollY / scrollRange;
             fraction = Math.max(0, Math.min(1, fraction));
             
             targetFrame = 1 + fraction * (totalFrames - 1);
@@ -197,50 +229,57 @@ document.addEventListener('DOMContentLoaded', () => {
                 isRendering = true;
                 requestAnimationFrame(renderLoop);
             }
-            
-            // Dynamic text overlays
-            if (scene1 && scene2 && scene3) {
-                if (fraction <= 0.28) {
-                    scene1.classList.add('active-scene');
-                } else {
-                    scene1.classList.remove('active-scene');
-                }
-                
-                if (fraction >= 0.32 && fraction <= 0.65) {
-                    scene2.classList.add('active-scene');
-                } else {
-                    scene2.classList.remove('active-scene');
-                }
-                
-                if (fraction >= 0.69) {
-                    scene3.classList.add('active-scene');
-                } else {
-                    scene3.classList.remove('active-scene');
-                }
-            }
-            
-            if (indicator) {
-                if (fraction > 0.1) {
-                    indicator.classList.add('hide');
-                } else {
-                    indicator.classList.remove('hide');
-                }
-            }
-        });
+        }, { passive: true });
         
         function renderLoop() {
             const diff = targetFrame - currentFrame;
+            // Increased ease-out factor from 0.035 to 0.08 for responsive, ultra-smooth scrolling feedback
             if (Math.abs(diff) < 0.005) {
                 currentFrame = targetFrame;
                 isRendering = false; // Stop rendering once animations settle
             } else {
-                currentFrame += diff * 0.035; // Smooth ease-out factor
+                currentFrame += diff * 0.08; 
             }
             
             const frameToDraw = Math.round(currentFrame);
             if (frameToDraw !== lastDrawnFrame) {
                 drawFrame(frameToDraw);
                 lastDrawnFrame = frameToDraw;
+            }
+            
+            // Render text overlays and indicators in sync with requestAnimationFrame
+            if (scrollRange > 0) {
+                // Compute fraction based on current rendered frame to ensure text transitions match image frames perfectly
+                let fraction = (currentFrame - 1) / (totalFrames - 1);
+                fraction = Math.max(0, Math.min(1, fraction));
+
+                if (scene1 && scene2 && scene3) {
+                    if (fraction <= 0.28) {
+                        if (!scene1.classList.contains('active-scene')) scene1.classList.add('active-scene');
+                    } else {
+                        if (scene1.classList.contains('active-scene')) scene1.classList.remove('active-scene');
+                    }
+                    
+                    if (fraction >= 0.32 && fraction <= 0.65) {
+                        if (!scene2.classList.contains('active-scene')) scene2.classList.add('active-scene');
+                    } else {
+                        if (scene2.classList.contains('active-scene')) scene2.classList.remove('active-scene');
+                    }
+                    
+                    if (fraction >= 0.69) {
+                        if (!scene3.classList.contains('active-scene')) scene3.classList.add('active-scene');
+                    } else {
+                        if (scene3.classList.contains('active-scene')) scene3.classList.remove('active-scene');
+                    }
+                }
+                
+                if (indicator) {
+                    if (fraction > 0.1) {
+                        if (!indicator.classList.contains('hide')) indicator.classList.add('hide');
+                    } else {
+                        if (indicator.classList.contains('hide')) indicator.classList.remove('hide');
+                    }
+                }
             }
             
             if (isRendering) {
@@ -614,15 +653,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Dynamic Header State on Scroll ---
     const header = document.querySelector('.header');
+    let isHeaderScrolled = false;
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.style.backgroundColor = 'rgba(10, 10, 10, 0.98)';
-            header.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.5)';
-        } else {
-            header.style.backgroundColor = 'rgba(10, 10, 10, 0.95)';
-            header.style.boxShadow = 'none';
+        const scrolled = window.scrollY > 50;
+        if (scrolled !== isHeaderScrolled) {
+            isHeaderScrolled = scrolled;
+            if (scrolled) {
+                header.style.backgroundColor = 'rgba(10, 10, 10, 0.98)';
+                header.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.5)';
+            } else {
+                header.style.backgroundColor = 'rgba(10, 10, 10, 0.95)';
+                header.style.boxShadow = 'none';
+            }
         }
-    });
+    }, { passive: true });
 
     // --- Contact Form Submission Handler (Saves to server bookings.json) ---
     const contactForm = document.getElementById('gym-contact-form');
@@ -697,27 +741,45 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Scroll Spy to Update Nav Link Active Class ---
     const sections = document.querySelectorAll('section[id], .hero-scroll-container[id]');
     const navLinksList = document.querySelectorAll('.nav-link');
+    let cachedSectionOffsets = [];
+
+    function cacheSectionOffsets() {
+        cachedSectionOffsets = Array.from(sections).map(section => ({
+            id: section.getAttribute('id'),
+            top: section.offsetTop,
+            height: section.offsetHeight
+        }));
+    }
+
+    // Cache offsets on initialization and resize
+    cacheSectionOffsets();
+    window.addEventListener('resize', cacheSectionOffsets);
 
     function scrollSpy() {
         const scrollPosition = window.scrollY + 120;
+        let activeId = null;
 
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-
-            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                navLinksList.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${sectionId}`) {
-                        link.classList.add('active');
-                    }
-                });
+        for (let i = 0; i < cachedSectionOffsets.length; i++) {
+            const sec = cachedSectionOffsets[i];
+            if (scrollPosition >= sec.top && scrollPosition < sec.top + sec.height) {
+                activeId = sec.id;
+                break;
             }
-        });
+        }
+
+        if (activeId) {
+            navLinksList.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === `#${activeId}`) {
+                    if (!link.classList.contains('active')) link.classList.add('active');
+                } else {
+                    if (link.classList.contains('active')) link.classList.remove('active');
+                }
+            });
+        }
     }
 
-    window.addEventListener('scroll', scrollSpy);
+    window.addEventListener('scroll', scrollSpy, { passive: true });
 
     // ==========================================================================
     // --- Admin Panel Operations Engine ---
