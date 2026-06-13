@@ -204,8 +204,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let resizeTimeout;
         function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
             cacheHeroDimensions();
             drawFrame(Math.round(currentFrame));
         }
