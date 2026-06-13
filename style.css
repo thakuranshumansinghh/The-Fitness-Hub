@@ -213,6 +213,10 @@ a {
     gap: 3rem;
 }
 
+.nav-cta {
+    margin-left: 3.5rem; /* Ensure comfortable separation between nav links and CTA button */
+}
+
 .nav-link {
     font-family: var(--font-body);
     font-size: 0.9rem;
