@@ -3,6 +3,32 @@ $root = $PSScriptRoot
 if (-not $root) { $root = Get-Location }
 $cache = @{}
 
+# Auto Git commit & push helper function
+function Sync-ToGitHub {
+    param (
+        [string]$Message
+    )
+    Write-Output "--- Auto-syncing updates to GitHub ---"
+    try {
+        Push-Location $root
+        $status = git status --porcelain data.json bookings.json admin-users.json
+        if ($status -and $status.Trim() -ne "") {
+            git add data.json bookings.json admin-users.json
+            git commit -m $Message
+            $branch = (git branch --show-current).Trim()
+            Write-Output "Pushing to origin $branch..."
+            git push origin $branch
+            Write-Output "Successfully pushed to GitHub!"
+        } else {
+            Write-Output "No changes detected to commit/push."
+        }
+    } catch {
+        Write-Output "Failed to push to GitHub: $_"
+    } finally {
+        Pop-Location
+    }
+}
+
 # Set up HttpListener
 $listener = New-Object System.Net.HttpListener
 $listener.Prefixes.Add("http://localhost:$port/")
@@ -52,6 +78,7 @@ while ($listener.IsListening) {
                 $response.ContentType = "application/json; charset=utf-8"
                 $response.ContentLength64 = $resBytes.Length
                 $response.OutputStream.Write($resBytes, 0, $resBytes.Length)
+                Sync-ToGitHub -Message "admin-update: content (data.json)"
             }
             $response.Close()
             continue
@@ -90,6 +117,7 @@ while ($listener.IsListening) {
                 $response.ContentType = "application/json; charset=utf-8"
                 $response.ContentLength64 = $resBytes.Length
                 $response.OutputStream.Write($resBytes, 0, $resBytes.Length)
+                Sync-ToGitHub -Message "admin-update: new booking (bookings.json)"
             }
             $response.Close()
             continue
@@ -124,6 +152,7 @@ while ($listener.IsListening) {
                 $response.ContentType = "application/json; charset=utf-8"
                 $response.ContentLength64 = $resBytes.Length
                 $response.OutputStream.Write($resBytes, 0, $resBytes.Length)
+                Sync-ToGitHub -Message "admin-update: delete booking (bookings.json)"
             }
             $response.Close()
             continue
@@ -139,6 +168,7 @@ while ($listener.IsListening) {
                 $response.ContentType = "application/json; charset=utf-8"
                 $response.ContentLength64 = $resBytes.Length
                 $response.OutputStream.Write($resBytes, 0, $resBytes.Length)
+                Sync-ToGitHub -Message "admin-update: clear bookings (bookings.json)"
             }
             $response.Close()
             continue
@@ -167,6 +197,7 @@ while ($listener.IsListening) {
                 $response.ContentType = "application/json; charset=utf-8"
                 $response.ContentLength64 = $resBytes.Length
                 $response.OutputStream.Write($resBytes, 0, $resBytes.Length)
+                Sync-ToGitHub -Message "admin-update: admin users (admin-users.json)"
             }
             $response.Close()
             continue
