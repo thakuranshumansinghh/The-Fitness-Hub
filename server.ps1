@@ -144,6 +144,34 @@ while ($listener.IsListening) {
             continue
         }
         
+        # 5. API: Load or Save admin users list
+        elseif ($path -eq "/api/admin-users") {
+            $usersFile = Join-Path $root "admin-users.json"
+            if ($request.HttpMethod -eq "GET") {
+                if (-not (Test-Path $usersFile)) {
+                    $defaultUsers = '[{"username":"The Fitness HUB","password":"thefitnesshub@25"}]'
+                    [System.IO.File]::WriteAllText($usersFile, $defaultUsers)
+                }
+                $bytes = [System.IO.File]::ReadAllBytes($usersFile)
+                $response.ContentType = "application/json; charset=utf-8"
+                $response.ContentLength64 = $bytes.Length
+                $response.OutputStream.Write($bytes, 0, $bytes.Length)
+            }
+            elseif ($request.HttpMethod -eq "POST") {
+                $reader = New-Object System.IO.StreamReader($request.InputStream)
+                $body = $reader.ReadToEnd()
+                [System.IO.File]::WriteAllText($usersFile, $body)
+                
+                $response.StatusCode = 200
+                $resBytes = [System.Text.Encoding]::UTF8.GetBytes('{"status":"success"}')
+                $response.ContentType = "application/json; charset=utf-8"
+                $response.ContentLength64 = $resBytes.Length
+                $response.OutputStream.Write($resBytes, 0, $resBytes.Length)
+            }
+            $response.Close()
+            continue
+        }
+        
         # ----------------------------------------------------
         # STATIC FILES SERVING
         # ----------------------------------------------------

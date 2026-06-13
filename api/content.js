@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { isKvEnabled, getFromKv, setToKv } = require('./_kv');
 
 const getFilePath = () => {
   const fileName = 'data.json';
@@ -19,7 +20,35 @@ const getFilePath = () => {
   return fs.existsSync(tmpPath) ? tmpPath : localPath;
 };
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
+  if (isKvEnabled()) {
+    if (req.method === 'GET') {
+      try {
+        let data = await getFromKv('fitness_hub_content');
+        if (!data) {
+          const filePath = getFilePath();
+          const fileData = fs.readFileSync(filePath, 'utf8');
+          data = JSON.parse(fileData);
+          await setToKv('fitness_hub_content', data);
+        }
+        return res.status(200).json(data);
+      } catch (error) {
+        return res.status(500).json({ error: error.message });
+      }
+    } else if (req.method === 'POST') {
+      try {
+        const data = req.body;
+        await setToKv('fitness_hub_content', data);
+        return res.status(200).json({ status: 'success' });
+      } catch (error) {
+        return res.status(500).json({ error: error.message });
+      }
+    } else {
+      res.setHeader('Allow', ['GET', 'POST']);
+      return res.status(405).end(`Method ${req.method} Not Allowed`);
+    }
+  }
+
   const filePath = getFilePath();
   
   if (req.method === 'GET') {
@@ -38,12 +67,11 @@ module.exports = (req, res) => {
           aboutStory1: "Founded in Kurla, Mumbai, THE FITNESS HUB was established to bridge the gap between commercialized fitness franchises and hardcore strength athletics. We set out to create a sanctuary where physical potential is realized through raw science, top-tier infrastructure, and unyielding discipline.",
           aboutStory2: "Every bar, platform, and program at the Hub is curated for serious results. We offer a high-intensity, zero-compromise environment designed to push you past your boundaries.",
           galleryImages: [
-            { "src": "assets/hero_bg.png", "caption": "MAIN STRENGTH ROOM" },
-            { "src": "assets/crossfit.png", "caption": "METABOLIC CONDITIONING FLOOR" },
-            { "src": "assets/bodybuilding.png", "caption": "FREE WEIGHT EQUIPMENT RACK" },
-            { "src": "assets/gallery_1.png", "caption": "POWERLIFTING PLATFORM" },
-            { "src": "assets/gallery_2.png", "caption": "CHAMPIONSHIP GRADE DUMBBELLS" },
-            { "src": "assets/gallery_3.png", "caption": "PULL-UP RIG AND RIGGING AREA" }
+            { "src": "assets/gallery_reception.jpg", "caption": "FRONT RECEPTION & SUPPLEMENT LOUNGE" },
+            { "src": "assets/gallery_cardio.jpg", "caption": "CARDIO ZONE & RUNNING DECK" },
+            { "src": "assets/gallery_dumbbells.jpg", "caption": "FREE WEIGHT RACK & DUMBBELLS" },
+            { "src": "assets/gallery_strength_floor.jpg", "caption": "STRENGTH FLOOR & MACHINES" },
+            { "src": "assets/gallery_trainer.jpg", "caption": "CHAMPIONSHIP COACHING TEAM" }
           ],
           testimonials: [
             {

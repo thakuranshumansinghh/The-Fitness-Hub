@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { isKvEnabled, getFromKv, setToKv } = require('./_kv');
 
 const getFilePath = () => {
   const fileName = 'bookings.json';
@@ -19,7 +20,28 @@ const getFilePath = () => {
   return fs.existsSync(tmpPath) ? tmpPath : localPath;
 };
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
+  if (isKvEnabled()) {
+    if (req.method === 'POST') {
+      try {
+        const { id } = req.body;
+        if (!id) {
+          return res.status(400).json({ error: 'Missing booking ID' });
+        }
+        
+        let bookings = await getFromKv('fitness_hub_bookings') || [];
+        const filteredBookings = bookings.filter(b => b.id !== id);
+        await setToKv('fitness_hub_bookings', filteredBookings);
+        return res.status(200).json({ status: 'success' });
+      } catch (error) {
+        return res.status(500).json({ error: error.message });
+      }
+    } else {
+      res.setHeader('Allow', ['POST']);
+      return res.status(405).end(`Method ${req.method} Not Allowed`);
+    }
+  }
+
   const filePath = getFilePath();
   
   if (req.method === 'POST') {

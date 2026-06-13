@@ -820,6 +820,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const securityUsername = document.getElementById('security-username');
     const securityPassword = document.getElementById('security-password');
 
+    // Sync/Save admin users server integration helpers
+    function syncAdminUsersFromServer() {
+        return fetch('/api/admin-users')
+            .then(res => {
+                if (!res.ok) throw new Error('API not available');
+                return res.json();
+            })
+            .then(users => {
+                localStorage.setItem('adminUsers', JSON.stringify(users));
+                localStorage.setItem('adminRegistered', 'true');
+            })
+            .catch(err => {
+                console.warn('Backend API not available for admin users, using localStorage only:', err);
+            });
+    }
+
+    function saveAdminUsersToServer(users) {
+        localStorage.setItem('adminUsers', JSON.stringify(users));
+        return fetch('/api/admin-users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(users)
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('API not available');
+            return res.json();
+        })
+        .catch(err => {
+            console.warn('Backend API not available, admin users saved to localStorage only:', err);
+        });
+    }
+
     // Initialize admin users in localStorage if not exist
     let currentUsers = localStorage.getItem('adminUsers');
     if (!currentUsers) {
@@ -843,6 +877,9 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('adminRegistered', 'true');
         } catch(e) {}
     }
+    
+    // Trigger initial background sync
+    syncAdminUsersFromServer();
 
     // Tab buttons and containers
     const tabBookingsBtn = document.getElementById('tab-bookings-btn');
@@ -927,21 +964,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function initAdminOverlayView() {
-        const isRegistered = localStorage.getItem('adminRegistered') === 'true';
-        const isLoggedIn = sessionStorage.getItem('adminLoggedIn') === 'true';
+        syncAdminUsersFromServer().finally(() => {
+            const isRegistered = localStorage.getItem('adminRegistered') === 'true';
+            const isLoggedIn = sessionStorage.getItem('adminLoggedIn') === 'true';
 
-        setupView.style.display = 'none';
-        loginView.style.display = 'none';
-        dashboardView.style.display = 'none';
+            setupView.style.display = 'none';
+            loginView.style.display = 'none';
+            dashboardView.style.display = 'none';
 
-        if (isLoggedIn) {
-            dashboardView.style.display = 'block';
-            loadAdminDashboard();
-        } else if (!isRegistered) {
-            setupView.style.display = 'block';
-        } else {
-            loginView.style.display = 'block';
-        }
+            if (isLoggedIn) {
+                dashboardView.style.display = 'block';
+                loadAdminDashboard();
+            } else if (!isRegistered) {
+                setupView.style.display = 'block';
+            } else {
+                loginView.style.display = 'block';
+            }
+        });
     }
 
     // --- Admin Registration Form ---
@@ -958,13 +997,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!users.some(u => u.username === userVal)) {
                     users.push({ username: userVal, password: passVal });
                 }
-                localStorage.setItem('adminUsers', JSON.stringify(users));
-                localStorage.setItem('adminRegistered', 'true');
-                
-                sessionStorage.setItem('adminLoggedIn', 'true');
-                sessionStorage.setItem('adminUsername', userVal);
-                setupForm.reset();
-                initAdminOverlayView();
+                saveAdminUsersToServer(users).finally(() => {
+                    localStorage.setItem('adminRegistered', 'true');
+                    sessionStorage.setItem('adminLoggedIn', 'true');
+                    sessionStorage.setItem('adminUsername', userVal);
+                    setupForm.reset();
+                    initAdminOverlayView();
+                });
             } else {
                 setupError.textContent = `Access Denied: Only the designated admin ID and password are permitted.`;
                 setupError.style.display = 'block';
@@ -1950,8 +1989,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (confirm(`Are you sure you want to permanently delete admin user "${targetUser.username}"?`)) {
                     users.splice(index, 1);
-                    localStorage.setItem('adminUsers', JSON.stringify(users));
-                    renderUsersTab();
+                    saveAdminUsersToServer(users).finally(() => {
+                        renderUsersTab();
+                    });
                 }
             });
         });
@@ -1988,12 +2028,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             users.push({ username, password });
-            localStorage.setItem('adminUsers', JSON.stringify(users));
-            
-            adminCreateUserForm.reset();
-            adminCreateUserForm.style.display = 'none';
-            adminAddUserBtn.textContent = 'ADD USER';
-            renderUsersTab();
+            saveAdminUsersToServer(users).finally(() => {
+                adminCreateUserForm.reset();
+                adminCreateUserForm.style.display = 'none';
+                adminAddUserBtn.textContent = 'ADD USER';
+                renderUsersTab();
+            });
         });
     }
 
@@ -2014,17 +2054,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const oldUsername = users[index].username;
             users[index].username = newUsername;
             users[index].password = newPassword;
-            localStorage.setItem('adminUsers', JSON.stringify(users));
+            saveAdminUsersToServer(users).finally(() => {
+                const currentLoggedInUser = sessionStorage.getItem('adminUsername');
+                if (oldUsername === currentLoggedInUser) {
+                    sessionStorage.setItem('adminUsername', newUsername);
+                }
 
-            const currentLoggedInUser = sessionStorage.getItem('adminUsername');
-            if (oldUsername === currentLoggedInUser) {
-                sessionStorage.setItem('adminUsername', newUsername);
-            }
-
-            adminEditUserForm.reset();
-            adminEditUserForm.style.display = 'none';
-            renderUsersTab();
-            alert('Admin credentials successfully updated!');
+                adminEditUserForm.reset();
+                adminEditUserForm.style.display = 'none';
+                renderUsersTab();
+                alert('Admin credentials successfully updated!');
+            });
         });
     }
 
@@ -2066,13 +2106,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 users[index].username = newUsername;
                 users[index].password = newPassword;
-                localStorage.setItem('adminUsers', JSON.stringify(users));
-                sessionStorage.setItem('adminUsername', newUsername);
+                saveAdminUsersToServer(users).finally(() => {
+                    sessionStorage.setItem('adminUsername', newUsername);
 
-                alert('Admin credentials successfully updated!');
-                securityForm.reset();
-                loadCurrentCredentialsToSecurityForm();
-                renderUsersTab();
+                    alert('Admin credentials successfully updated!');
+                    securityForm.reset();
+                    loadCurrentCredentialsToSecurityForm();
+                    renderUsersTab();
+                });
             } else {
                 alert('Error: Current admin session user not found in the users list.');
             }

@@ -11,7 +11,7 @@ $Action = {
     $path = $Event.SourceEventArgs.FullPath
     
     # Ignore git internals, system generated files, vercel caching, and temporary log files
-    if ($path -match '\\.git\\' -or $path -match '\\.vercel\\' -or $path -match 'watch-and-push' -or $path -match '\\.system_generated\\' -or $path -match 'bookings.json') {
+    if ($path -match '\\.git\\' -or $path -match '\\.vercel\\' -or $path -match 'watch-and-push' -or $path -match '\\.system_generated\\' -or $path -match 'bookings.json' -or $path -match 'admin-users.json') {
         return
     }
     

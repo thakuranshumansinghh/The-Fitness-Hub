@@ -3,7 +3,7 @@ const path = require('path');
 const { isKvEnabled, getFromKv, setToKv } = require('./_kv');
 
 const getFilePath = () => {
-  const fileName = 'bookings.json';
+  const fileName = 'admin-users.json';
   const tmpPath = path.join('/tmp', fileName);
   const localPath = path.join(process.cwd(), fileName);
   
@@ -12,10 +12,11 @@ const getFilePath = () => {
       if (fs.existsSync(localPath)) {
         fs.copyFileSync(localPath, tmpPath);
       } else {
-        fs.writeFileSync(tmpPath, '[]');
+        const defaultUsers = [{ username: "The Fitness HUB", password: "thefitnesshub@25" }];
+        fs.writeFileSync(tmpPath, JSON.stringify(defaultUsers, null, 2));
       }
     } catch (e) {
-      console.error('Error copying bookings file to /tmp:', e);
+      console.error('Error copying admin-users file to /tmp:', e);
     }
   }
   
@@ -26,21 +27,19 @@ module.exports = async (req, res) => {
   if (isKvEnabled()) {
     if (req.method === 'GET') {
       try {
-        let bookings = await getFromKv('fitness_hub_bookings');
-        if (!bookings) {
-          bookings = [];
-          await setToKv('fitness_hub_bookings', bookings);
+        let users = await getFromKv('fitness_hub_admin_users');
+        if (!users) {
+          users = [{ username: "The Fitness HUB", password: "thefitnesshub@25" }];
+          await setToKv('fitness_hub_admin_users', users);
         }
-        return res.status(200).json(bookings);
+        return res.status(200).json(users);
       } catch (error) {
         return res.status(500).json({ error: error.message });
       }
     } else if (req.method === 'POST') {
       try {
-        const newBooking = req.body;
-        let bookings = await getFromKv('fitness_hub_bookings') || [];
-        bookings.push(newBooking);
-        await setToKv('fitness_hub_bookings', bookings);
+        const users = req.body;
+        await setToKv('fitness_hub_admin_users', users);
         return res.status(200).json({ status: 'success' });
       } catch (error) {
         return res.status(500).json({ error: error.message });
@@ -56,26 +55,18 @@ module.exports = async (req, res) => {
   if (req.method === 'GET') {
     try {
       if (!fs.existsSync(filePath)) {
-        return res.status(200).json([]);
+        const defaultUsers = [{ username: "The Fitness HUB", password: "thefitnesshub@25" }];
+        fs.writeFileSync(filePath, JSON.stringify(defaultUsers, null, 2));
       }
       const fileData = fs.readFileSync(filePath, 'utf8');
-      const data = fileData.trim() === "" ? [] : JSON.parse(fileData);
-      return res.status(200).json(data);
+      return res.status(200).json(JSON.parse(fileData));
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
   } else if (req.method === 'POST') {
     try {
-      const newBooking = req.body;
-      let bookings = [];
-      
-      if (fs.existsSync(filePath)) {
-        const fileData = fs.readFileSync(filePath, 'utf8');
-        bookings = fileData.trim() === "" ? [] : JSON.parse(fileData);
-      }
-      
-      bookings.push(newBooking);
-      fs.writeFileSync(filePath, JSON.stringify(bookings, null, 2));
+      const users = req.body;
+      fs.writeFileSync(filePath, JSON.stringify(users, null, 2));
       return res.status(200).json({ status: 'success' });
     } catch (error) {
       return res.status(500).json({ error: error.message });
